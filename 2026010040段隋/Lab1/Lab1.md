@@ -52,7 +52,7 @@
 - 累计练习时间及其统计范围；
 - 按月份排列的日历方格和练习记录。
 
-截图必须保存为 `imgs/typingclub_202_completed.png`。`。将截图放入指定目录后，下面应能正常显示图片：
+截图必须保存为 `imgs/typingclub_calendar.png`。将截图放入指定目录后，下面应能正常显示图片：
 
 ![TypingClub 练习日程表](imgs/typingclub_calendar.png)
 
