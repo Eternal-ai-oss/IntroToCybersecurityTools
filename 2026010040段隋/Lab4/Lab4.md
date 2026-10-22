@@ -292,7 +292,7 @@ GitHub Student Developer Pack 是 GitHub 面向学生的福利包，包含 GitHu
 
 | 项目 | 申请状态 | 一句话说明（审核中、遇到的问题等） |
 | --- | --- | --- |
-| JetBrains 学生授权 | 审核中 | 已用 edu 邮箱提交学生计划申请，正在等待验证邮件确认，授权生效后按 6.1 的步骤登录激活 |
+| JetBrains 学生授权 | 已通过 | 用 edu 邮箱申请已获批准，Educational Pack 有效期至 2027-10-21（License ID: ZAL2EMX8MC），IDEA / PyCharm / CLion 等全家桶均可免费使用 |
 | GitHub 学生开发包 | 审核中 | 已按 6.2 的步骤提交学生包申请，正在等待 GitHub 审核，通过后 Pack 权益自动生效 |
 
 本节不要求截图，也不要求审核已经通过——**用 edu 邮箱把两个申请都提交，并如实填写状态，即算完成**。两个账号请保管好账号和密码，后面的课程会用到。
