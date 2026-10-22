@@ -82,7 +82,7 @@ WorkBuddy 适合从自然语言和图形界面入门；信息安全专业的同�
 | 项目 | 内容 |
 | --- | --- |
 | 网页主题 | 大学生网络安全常识 |
-| 公网访问地址 | https://lxy294.github.io/cyber-safety-web/ |
+| 公网访问地址 | https://cyber-safety-web.app.workbuddy.host/ |
 
 ### 2.4 公网网页展示截图
 
