@@ -180,11 +180,11 @@ Content-Type: text/html
 
 | 题目 | CTFHub 路径 | WP 文件 | Flag |
 | --- | --- | --- | --- |
-| 目录遍历 | 信息泄露 → 目录遍历 | [wp_dir_traversal.md](wp/wp_dir_traversal.md) | ctfhub{9899a2a772939c0ac95053ac} |
-| PHPINFO | 信息泄露 → PHPINFO | [wp_phpinfo.md](wp/wp_phpinfo.md) |	ctfhub{79ea23f87e51f6c5beb79db2}  |
-| 请求方式 | Web 前置技能 → HTTP 协议 → 请求方式 | [wp_http_method.md](wp/wp_http_method.md) |ctfhub{a4ca00a24073339795f6a0c9}  |
+| 目录遍历 | 信息泄露 → 目录遍历 | [wp_dir_traversal.md](wp/wp_dir_traversal.md) | ctfhub{c1736d31e6f6ee4a3f0e14e3} |
+| PHPINFO | 信息泄露 → PHPINFO | [wp_phpinfo.md](wp/wp_phpinfo.md) | ctfhub{79ea23f87e51f6c5beb79db2} |
+| 请求方式 | Web 前置技能 → HTTP 协议 → 请求方式 | [wp_http_method.md](wp/wp_http_method.md) | ctfhub{a4ca00a24073339795f6a0c9} |
 | 302 跳转 | Web 前置技能 → HTTP 协议 → 302 跳转 | [wp_redirect_302.md](wp/wp_redirect_302.md) | ctfhub{8a0ffc4f92bc82b702de4e77} |
-| Cookie | Web 前置技能 → HTTP 协议 → Cookie | [wp_cookie.md](wp/wp_cookie.md) |ctfhub{f94bf433268b06ae84e48ef4} |
+| Cookie | Web 前置技能 → HTTP 协议 → Cookie | [wp_cookie.md](wp/wp_cookie.md) | ctfhub{f94bf433268b06ae84e48ef4} |
 | 基础认证 | Web 前置技能 → HTTP 协议 → 基础认证 | [wp_basic_auth.md](wp/wp_basic_auth.md) | ctfhub{6271bf8ca679c9ea111a055e} |
 
 > 每道题的题目要求、提示、截图要求和写作提示都写在对应的 WP 模板里。**不要改动 WP 文件名和本表的链接**；如果某道题临时下线，按老师通知替换题目，并同步修改本表和对应 WP，不要删除整行。
@@ -199,12 +199,12 @@ Content-Type: text/html
 
 | 题目 | HTTP 报文位置 | 漏洞/问题 |
 | --- | --- | --- |
-| 目录遍历 | 请求行 | 路径可控，读取服务器任意文件 |
-| PHPINFO | 响应体 | 页面泄露PHP环境、敏感配置信息 |
-| 请求方式 | 请求行（Method） |服务端校验请求方法，需要指定方法访问 |
-| 302 跳转 |响应头（Location） | 页面跳转，需要跟随跳转获取资源 |
-| Cookie | 请求头Cookie字段 | Cookie参数可控，用来传递身份标识 |
-| 基础认证 | 请求头Authorization | Basic认证，需要账号密码爆破认证 |
+| 目录遍历 | 请求行的 URL 路径 | 未关闭目录浏览，目录列表泄露文件名，可逐层点到 flag.txt |
+| PHPINFO | 响应体 | 页面把环境变量、绝对路径、版本全打印出来，属信息泄露 |
+| 请求方式 | 请求行（方法） | 服务端只认指定方法，浏览器只会发 GET，需改报文 |
+| 302 跳转 | 状态行 + 响应头 Location | 临时重定向，浏览器自动跟随，原始响应和响应体里才有 flag |
+| Cookie | 请求头 Cookie | 权限判断放在客户端可改的 Cookie 里，改成 admin=1 即越权 |
+| 基础认证 | 请求头 Authorization | 凭据只是 Base64 编码（不是加密），密码可被字典试出 |
 
 示例（不是本题）：`404 错误页泄露服务器版本 → 状态行/响应头 → 信息泄露`。
 
@@ -212,7 +212,7 @@ Content-Type: text/html
 
 用 3—5 句话回答：这 6 道题做完后，你对 HTTP 请求/响应的哪一部分印象最深？为什么？
 
-（填写）
+印象最深的是**请求行**，因为 6 道题里有两道完全靠它：请求方式那题只把 `GET` 换成 `CTFHUB`，同一条 URL 就从“给提示”变成“给 flag”；目录遍历那题更直接，flag 就在 URL 路径指向的 `flag.txt` 里，改一改路径就能拿到。以前我以为地址栏里的东西只是“网页的地址”，做完这几题才反应过来它其实是请求行的后半截，服务器完全按这一行决定给你什么。其次是 Cookie 和 302：一个证明客户端传来的值不能拿来当权限依据，一个证明只看浏览器最终显示的页面会漏掉中间的响应，得用 `curl -i` 或 Burp 看原始报文。现在再看一次 HTTP 请求，我会先拆成“请求行 / 请求头 / 响应头 / 响应体”四块去对，而不是只看页面长什么样。
 
 ---
 
@@ -222,8 +222,8 @@ Content-Type: text/html
 
 | 选做题 | 是否完成 | 关键工具/方法 | 一句话收获 |
 | --- | --- | --- | --- |
-| 备份文件下载 | （填写“完成”或“未做”） | （填写） | （填写） |
-| Git 泄露 | （填写“完成”或“未做”） | （填写） | （填写） |
+| 备份文件下载 | 未做 | 无 | 无 |
+| Git 泄露 | 未做 | 无 | 无 |
 
 ---
 
