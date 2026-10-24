@@ -37,18 +37,18 @@ homework/Lab3/
 └── Lab3.md
 ```
 
-| 文件        | 作用               | 说明      |
-| :-------- | :--------------- | :------ |
+| 文件 | 作用 | 说明 |
+| :--- | :--- | :--- |
 | `Lab3.md` | 本文档：按顺序完成环境搭建与验收 | 按顺序完成即可 |
 
 ### 教师通过企业微信发送的文件
 
 VMware 安装包和 Kali 镜像体积很大，不放在课程仓库中，由教师通过**企业微信**发送。请自行接收并保存到宿主机上一个方便查找的目录，例如 `D:\OSLab\`：
 
-| 文件                                          | 作用                                                              |
-| :------------------------------------------ | :-------------------------------------------------------------- |
-| `VMware-Workstation-Full-26H1-25388281.exe` | VMware Workstation Pro Windows 安装包，用于在 Windows 上安装虚拟机软件         |
-| `kali-linux-2026.2-vmware-amd64.7z`         | Kali Linux 2026.2 **预装 VMware 虚拟机**（Xfce 桌面，已装好系统，解压后直接使用，无需安装） |
+| 文件 | 作用 |
+| :--- | :--- |
+| `VMware-Workstation-Full-26H1-25388281.exe` | VMware Workstation Pro Windows 安装包，用于在 Windows 上安装虚拟机软件 |
+| `kali-linux-2026.2-vmware-amd64.7z` | Kali Linux 2026.2 **预装 VMware 虚拟机**（Xfce 桌面，已装好系统，解压后直接使用，无需安装） |
 
 > **注意**：这两个文件不要放进课程仓库的文件夹，也不要提交到 Git。仓库只用于提交作业文档、代码和截图，提交大文件会导致 PR 无法正常检查。
 
@@ -74,23 +74,23 @@ VMware 安装包和 Kali 镜像体积很大，不放在课程仓库中，由教�
 
 开始前先确认自己的电脑满足以下要求：
 
-| 项目     | 最低要求               | 建议配置                   |
-| :----- | :----------------- | :--------------------- |
-| 操作系统   | Windows 10/11 64 位 | Windows 11 64 位        |
-| 内存     | 8GB                | 16GB 或以上               |
-| 磁盘剩余空间 | 40GB               | 80GB 或以上               |
-| CPU    | 支持虚拟化              | Intel VT-x 或 AMD-V 已开启 |
-| 网络     | 可访问互联网             | 安装和更新软件包会用到            |
+| 项目 | 最低要求 | 建议配置 |
+| :--- | :--- | :--- |
+| 操作系统 | Windows 10/11 64 位 | Windows 11 64 位 |
+| 内存 | 8GB | 16GB 或以上 |
+| 磁盘剩余空间 | 40GB | 80GB 或以上 |
+| CPU | 支持虚拟化 | Intel VT-x 或 AMD-V 已开启 |
+| 网络 | 可访问互联网 | 安装和更新软件包会用到 |
 
 ### 根据宿主机选择虚拟机配置
 
 先在 Windows 的“任务管理器 → 性能”中查看宿主机的 CPU 核心数和内存，再在“此电脑”中查看存放虚拟机的磁盘剩余空间。按下表选择与自己宿主机匹配的档位：
 
-| 宿主机情况                        | 虚拟 CPU 总核心数 |  虚拟内存  | 虚磁盘上限 | 适用说明                   |
-| :--------------------------- | :---------: | :----: | :---: | :--------------------- |
-| 8GB 内存，4 核左右，剩余 50GB 以上      |     2 核     | 4096MB |  40GB | 最低可用档；做实验时关闭宿主机上不必要的程序 |
-| 16GB 内存，6 核以上，剩余 80GB 以上     |     2 核     | 6144MB |  60GB | **课程推荐档**；运行安全工具比较流畅   |
-| 32GB 及以上内存，8 核以上，剩余 120GB 以上 |     4 核     | 8192MB |  80GB | 宽裕档；适合长期保留多个快照         |
+| 宿主机情况 | 虚拟 CPU 总核心数 | 虚拟内存 | 虚磁盘上限 | 适用说明 |
+| :--- | :---: | :---: | :---: | :--- |
+| 8GB 内存，4 核左右，剩余 50GB 以上 | 2 核 | 4096MB | 40GB | 最低可用档；做实验时关闭宿主机上不必要的程序 |
+| 16GB 内存，6 核以上，剩余 80GB 以上 | 2 核 | 6144MB | 60GB | **课程推荐档**；运行安全工具比较流畅 |
+| 32GB 及以上内存，8 核以上，剩余 120GB 以上 | 4 核 | 8192MB | 80GB | 宽裕档；适合长期保留多个快照 |
 
 > **选择规则**：宿主机同时满足该行的内存、CPU 和磁盘条件时，才选择该档。任意一项不满足时，选低一档。不要把宿主机的全部 CPU 或内存分给虚拟机，否则 Windows 和虚拟机都会变卡。
 
@@ -143,7 +143,7 @@ VMware 安装包和 Kali 镜像体积很大，不放在课程仓库中，由教�
 ### 步骤 1：解压 7z 压缩包
 
 1. 在 Windows 中找到 `kali-linux-2026.2-vmware-amd64.7z`。
-2. Windows 11 可直接在资源管理器中右键选择**全部解压缩**；Windows 10 需要先安装 7-Zip（<https://www.7-zip.org/>），再右键 → **7-Zip → 解压到 "kali-linux-2026.2-vmware-amd64"**。
+2. Windows 11 可直接在资源管理器中右键选择**全部解压缩**；Windows 10 需要先安装 7-Zip（<https://www.7-zip.org/>），再右键 → **7-Zip → 解压到 "kali-linux-2026.2-vmware-amd64\"**。
 3. 解压位置选剩余空间充足的磁盘：解压后的虚拟磁盘会随使用增长，建议预留 60GB 以上。
 
 ### 步骤 2：在 VMware 中打开并启动
@@ -156,11 +156,11 @@ VMware 安装包和 Kali 镜像体积很大，不放在课程仓库中，由教�
 
 关闭虚拟机后，选中它并打开 **VM → Settings**，按第三节选定的档位调整：
 
-| 硬件              | 建议值                            |
-| :-------------- | :----------------------------- |
-| Memory          | 6144 MB；宿主机只有 8GB 内存时改为 4096MB |
-| Processors      | 2 个核心                          |
-| Network Adapter | NAT（保持默认）                      |
+| 硬件 | 建议值 |
+| :--- | :--- |
+| Memory | 6144 MB；宿主机只有 8GB 内存时改为 4096MB |
+| Processors | 2 个核心 |
+| Network Adapter | NAT（保持默认） |
 
 > VMware 可能将 CPU 分成 **Number of processors** 和 **Number of cores per processor** 两项。本课程建议前者设为 `1`，2 核档将后者设为 `2`，4 核档将后者设为 `4`。两者相乘才是 Kali 中 `nproc` 看到的总核心数。
 >
@@ -182,10 +182,10 @@ VMware 安装包和 Kali 镜像体积很大，不放在课程仓库中，由教�
 
 预装镜像的默认账号：
 
-| 项目  | 默认值    |
-| :-- | :----- |
+| 项目 | 默认值 |
+| :--- | :--- |
 | 用户名 | `kali` |
-| 密码  | `kali` |
+| 密码 | `kali` |
 
 1. 在登录界面输入用户名 `kali` 和密码 `kali`。
 2. 进入桌面后按 `Ctrl + Alt + T` 打开终端，执行 `passwd` 修改密码，按提示输入两遍新密码并牢记。后面的 SSH 远程登录用的就是这个新密码。
@@ -221,15 +221,15 @@ df -h /
 
 看 `Size` 和 `Avail` 列。根文件系统容量会略小于磁盘总量，属于正常现象。
 
-| 项目                       | 你的填写内容          |
-| :----------------------- | :-------------- |
-| 宿主机内存 / CPU 核心 / 存放盘剩余空间 | 15.6G 24 371.5G |
-| 选择的配置档位                  | 课程推荐档           |
-| 虚拟 CPU 核心数               | 2               |
-| 虚拟内存                     | 7.7Gi           |
-| 虚磁盘容量                    | 80.1G           |
-| 根分区可用空间                  | 59G             |
-| 资源分配是否符合对应档位             | 是               |
+| 项目 | 你的填写内容 |
+| :--- | :--- |
+| 宿主机内存 / CPU 核心 / 存放盘剩余空间 |15.6G 24 371.5G  |
+| 选择的配置档位 | 课程推荐档 |
+| 虚拟 CPU 核心数 | 2 |
+| 虚拟内存 | 7.7Gi |
+| 虚磁盘容量 | 80.1G |
+| 根分区可用空间 | 59G|
+| 资源分配是否符合对应档位 | 是|
 
 ![虚机资源](imgs/lab3_resources.png)
 
@@ -338,15 +338,15 @@ sudo apt update
 
 ### 验收
 
-| 项目                                       | 你的填写内容         |
-| :--------------------------------------- | :------------- |
-| 虚拟机 IP 地址                                | 192.168.53.128 |
-| 网络模式                                     | NAT            |
-| ping `223.5.5.5` 是否成功                    | 是              |
-| ping `mirrors.tuna.tsinghua.edu.cn` 是否成功 | 是              |
-| 软件源（官方源 / 已换的镜像站）                        | 官方源            |
-| `sudo apt update` 是否成功                   | 是              |
-| 联网是否合格                                   | 是              |
+| 项目 | 你的填写内容 |
+| :--- | :--- |
+| 虚拟机 IP 地址 |192.168.53.128  |
+| 网络模式 | NAT  |
+| ping `223.5.5.5` 是否成功 | 是|
+| ping `mirrors.tuna.tsinghua.edu.cn` 是否成功 |是 |
+| 软件源（官方源 / 已换的镜像站） | 官方源 |
+| `sudo apt update` 是否成功 | 是|
+| 联网是否合格 | 是|
 
 ![虚拟机联网](imgs/lab3_network.png)
 
@@ -424,7 +424,6 @@ hostname -I
 1. 在 Windows 中打开 <https://mobaxterm.mobatek.net/>，下载 **Home Edition**（免费，选择 Installer 版）。
 2. 双击安装包，按向导默认安装即可。
 
-
 ### 步骤 3：新建 SSH 会话
 
 1. 打开 MobaXterm，点击左上角 **Session → SSH**。
@@ -452,13 +451,13 @@ hostname -I
 
 ### 验收
 
-| 项目                 | 你的填写内容         |
-| :----------------- | :------------- |
-| Kali 的 IP 地址       | 192.168.53.128 |
-| 登录用的 Kali 用户名      | kali           |
-| 是否登录成功             | 是              |
-| 远程终端里 `whoami` 的输出 | kali           |
-| 远程登录是否合格           | 是              |
+| 项目 | 你的填写内容 |
+| :--- | :--- |
+| Kali 的 IP 地址 |192.168.53.128 |
+| 登录用的 Kali 用户名 |kali |
+| 是否登录成功 | 是|
+| 远程终端里 `whoami` 的输出 |kali |
+| 远程登录是否合格 | 是|
 
 ![MobaXterm 远程登录](imgs/lab3_mobaxterm.png)
 
@@ -500,7 +499,6 @@ Host kali-oslab
 3. 按 `` Ctrl+` `` 打开集成终端，执行 `uname -a`——输出是 Kali 的 Linux 内核信息，说明这个终端跑在虚拟机里而不是 Windows 上。
 
 > **常见问题**：
->
 > - 连接超时：先用 MobaXterm 试一次登录，确认 SSH 服务端和 IP 都正常，再回来连 VSCode。
 > - 提示 `could not establish connection`：多半是虚拟机重启后 IP 变了，更新 config 文件里的 `HostName` 后重连。
 > - 每次连接都要输密码：属正常现象。嫌麻烦可以在 MobaXterm 的 **Tools → MobaKeyGen** 生成密钥对做免密登录（选做，不影响本次验收）。
@@ -508,13 +506,13 @@ Host kali-oslab
 
 ### 验收
 
-| 项目                      | 你的填写内容                                                                                                  |
-| :---------------------- | :------------------------------------------------------------------------------------------------------ |
-| 配置的主机别名（如 `kali-oslab`） | `kali-oslab`                                                                                            |
-| 是否连接成功                  | 是。Remote-SSH 已成功连接并保持会话，远程服务端 `/home/kali/.vscode-server` 正常启动（平台 linux、osReleaseId kali、arch x86_64）   |
-| 能否打开远程文件夹               | 能                                                                                                       |
-| 远程终端里 `uname -a` 的输出    | Linux kali 6.19.14+kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.19.14-1+kali1 (2026-05-05) x86_64 GNU/Linux |
-| Remote-SSH 是否合格         | 是                                                                                                       |
+| 项目 | 你的填写内容 |
+| :--- | :--- |
+| 配置的主机别名（如 `kali-oslab`） | `kali-oslab` |
+| 是否连接成功 | 是。Remote-SSH 已成功连接并保持会话，远程服务端 `/home/kali/.vscode-server` 正常启动（平台 linux、osReleaseId kali、arch x86_64） |
+| 能否打开远程文件夹 | 能|
+| 远程终端里 `uname -a` 的输出 |Linux kali 6.19.14+kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.19.14-1+kali1 (2026-05-05) x86_64 GNU/Linux |
+| Remote-SSH 是否合格 |是 |
 
 ![VSCode Remote-SSH](imgs/lab3_vscode_remote.png)
 
@@ -541,13 +539,13 @@ Host kali-oslab
 nmcli device status
 ```
 
-1. 如果网卡显示 `disconnected`，先重启 Kali 网络服务：
+3. 如果网卡显示 `disconnected`，先重启 Kali 网络服务：
 
 ```bash
 sudo systemctl restart NetworkManager
 ```
 
-1. 再次执行 `hostname -I`、`ip route` 和 `ping -c 4 223.5.5.5`。能 ping IP 但不能 ping 域名时，是 DNS 问题；IP 和域名都不通时，先检查 NAT 和宿主机网络。
+4. 再次执行 `hostname -I`、`ip route` 和 `ping -c 4 223.5.5.5`。能 ping IP 但不能 ping 域名时，是 DNS 问题；IP 和域名都不通时，先检查 NAT 和宿主机网络。
 
 ### 问题 2：`apt update` 或安装软件失败
 
@@ -631,13 +629,13 @@ Kali 中 SSH 服务默认不一定开机自启，所以 `systemctl is-active ssh
 
 ### 其他常见问题
 
-| 现象                 | 可能原因              | 处理                               |
-| :----------------- | :---------------- | :------------------------------- |
-| VMware 提示不支持虚拟化    | BIOS/UEFI 中未开启虚拟化 | 开启 Intel VT-x / AMD-V / SVM Mode |
-| 创建虚拟机后很卡           | 分配内存太少或宿主机内存不足    | 虚拟机至少分配 4GB；关闭宿主机不必要的程序          |
-| 忘记 Kali 密码         | 无法登录或使用 `sudo`    | 没有重要数据时，删除虚拟机文件重新解压一份最省时间        |
-| 鼠标被虚拟机捕获           | VMware 正常行为       | 按 `Ctrl + Alt` 释放鼠标              |
-| 终端里粘贴的 `sudo` 命令卡住 | 在等密码              | 输入密码时终端不显示字符，直接输入后回车即可           |
+| 现象 | 可能原因 | 处理 |
+| :--- | :--- | :--- |
+| VMware 提示不支持虚拟化 | BIOS/UEFI 中未开启虚拟化 | 开启 Intel VT-x / AMD-V / SVM Mode |
+| 创建虚拟机后很卡 | 分配内存太少或宿主机内存不足 | 虚拟机至少分配 4GB；关闭宿主机不必要的程序 |
+| 忘记 Kali 密码 | 无法登录或使用 `sudo` | 没有重要数据时，删除虚拟机文件重新解压一份最省时间 |
+| 鼠标被虚拟机捕获 | VMware 正常行为 | 按 `Ctrl + Alt` 释放鼠标 |
+| 终端里粘贴的 `sudo` 命令卡住 | 在等密码 | 输入密码时终端不显示字符，直接输入后回车即可 |
 
 ---
 
@@ -649,7 +647,7 @@ Kali 中 SSH 服务默认不一定开机自启，所以 `systemctl is-active ssh
 
 Kali 默认从官方源（`http.kali.org`，仓库代号 `kali-rolling`）下载软件包。在中国大陆访问官方源经常很慢，甚至连接超时，会导致后面的 `sudo apt update` 和 `sudo apt install` 长时间卡住或直接失败。把软件源换成国内镜像站之后，下载速度通常有明显提升。
 
-本节以**清华大学开源软件镜像站（TUNA）**&#x4E3A;例。
+本节以**清华大学开源软件镜像站（TUNA）**为例。
 
 ### 步骤 1：备份原有配置
 
@@ -702,23 +700,23 @@ sudo apt update
 
 如果清华源当时较慢或无法访问，可以把上面命令中的地址换成下面任意一个，其余内容保持不变：
 
-| 镜像站       | 地址                                          |
-| :-------- | :------------------------------------------ |
+| 镜像站 | 地址 |
+| :--- | :--- |
 | 清华大学 TUNA | `https://mirrors.tuna.tsinghua.edu.cn/kali` |
-| 阿里云       | `https://mirrors.aliyun.com/kali`           |
-| 中国科学技术大学  | `https://mirrors.ustc.edu.cn/kali`          |
+| 阿里云 | `https://mirrors.aliyun.com/kali` |
+| 中国科学技术大学 | `https://mirrors.ustc.edu.cn/kali` |
 
 ---
 
 ## 环境验收总结
 
-| 验收项目              | 合格标准                                                    | 你的结论                                                                                                                                                                                |
-| :---------------- | :------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 虚拟机联网             | 具有 IP 和默认路由，IP 联通与 DNS 解析正常                             | 合格。IP 为 `192.168.53.128`，默认路由为 `default via 192.168.53.2 dev eth0`；`ping -c 4 223.5.5.5` 与 `ping -c 4 mirrors.tuna.tsinghua.edu.cn` 均 4 发 4 收、丢包率 0%                                |
-| 软件源               | `sudo apt update` 成功，没有 `Err` 或 `Failed`（使用官方源或国内镜像站均可） | 合格。使用官方源（`http.kali.org`，仓库代号 `kali-rolling`，即 `Hit:1 http://http.kali.org/kali kali-rolling InRelease`），`sudo apt update` 正常完成并读取软件包列表，输出中没有 `Err:`、`Failed` 或 `Could not resolve` |
-| CPU、内存、存储         | 至少 2 核、4GB、40GB，且与宿主机档位匹配                               | 合格。`nproc` 为 2 核，`free -h` 的 Mem total 为 7.7Gi，虚磁盘 80.1G，根分区可用 59G，满足「至少 2 核、4GB、40GB」的要求。内存 8GB 略高于课程推荐档规定的 6144MB，宿主机为 16GB 内存，未超分                                                |
-| MobaXterm 远程登录    | 从 Windows 用 MobaXterm 能 SSH 登录 Kali 并在远程终端执行命令          | 合格。从 Windows 用 MobaXterm 以 `kali@192.168.53.128:22` SSH 登录成功，远程终端 `whoami` 与 `hostname` 均输出 `kali`，`hostname -I` 输出 `192.168.53.128`                                                |
-| VSCode Remote-SSH | VSCode 能通过 Remote-SSH 连接 Kali，打开远程文件夹并在远程终端执行命令         | 合格。VSCode 通过 Remote-SSH 以主机别名 `kali-oslab` 连接成功，打开远程主目录 `/home/kali`，远程集成终端中 `uname -a` 返回 Kali 6.19.14 内核信息                                                                        |
+| 验收项目 | 合格标准 | 你的结论 |
+| :--- | :--- | :--- |
+| 虚拟机联网 | 具有 IP 和默认路由，IP 联通与 DNS 解析正常 | 合格。IP 为 `192.168.53.128`，默认路由为 `default via 192.168.53.2 dev eth0`；`ping -c 4 223.5.5.5` 与 `ping -c 4 mirrors.tuna.tsinghua.edu.cn` 均 4 发 4 收、丢包率 0% |
+| 软件源 | `sudo apt update` 成功，没有 `Err` 或 `Failed`（使用官方源或国内镜像站均可） | 合格。使用官方源（`http.kali.org`，仓库代号 `kali-rolling`，即 `Hit:1 http://http.kali.org/kali kali-rolling InRelease`），`sudo apt update` 正常完成并读取软件包列表，输出中没有 `Err:`、`Failed` 或 `Could not resolve` |
+| CPU、内存、存储 | 至少 2 核、4GB、40GB，且与宿主机档位匹配 | 合格。`nproc` 为 2 核，`free -h` 的 Mem total 为 7.7Gi，虚磁盘 80.1G，根分区可用 59G，满足「至少 2 核、4GB、40GB」的要求。内存 8GB 略高于课程推荐档规定的 6144MB，宿主机为 16GB 内存，未超分 |
+| MobaXterm 远程登录 | 从 Windows 用 MobaXterm 能 SSH 登录 Kali 并在远程终端执行命令 | 合格。从 Windows 用 MobaXterm 以 `kali@192.168.53.128:22` SSH 登录成功，远程终端 `whoami` 与 `hostname` 均输出 `kali`，`hostname -I` 输出 `192.168.53.128` |
+| VSCode Remote-SSH | VSCode 能通过 Remote-SSH 连接 Kali，打开远程文件夹并在远程终端执行命令 | 合格。VSCode 通过 Remote-SSH 以主机别名 `kali-oslab` 连接成功，打开远程主目录 `/home/kali`，远程集成终端中 `uname -a` 返回 Kali 6.19.14 内核信息 |
 
 简要说明你遇到的问题、解决方法，以及当前环境是否可以继续完成后续实验：
 
@@ -743,11 +741,11 @@ sudo apt update
 - 必须使用电脑自带的截图功能，严禁使用手机拍摄屏幕。
 - 所有截图放在 `imgs/` 目录中，文件名与下表一致。
 
-| 截图内容                                                                 | 文件名                           |
-| :------------------------------------------------------------------- | :---------------------------- |
-| IP、默认路由、IP ping、域名 ping 和 `apt update` 成功                            | `imgs/lab3_network.png`       |
-| `nproc`、`free -h`、`lsblk`、`df -h /` 输出                               | `imgs/lab3_resources.png`     |
-| MobaXterm SSH 会话登录成功，能看到远程终端中 `whoami`、`hostname`、`hostname -I` 的输出  | `imgs/lab3_mobaxterm.png`     |
+| 截图内容 | 文件名 |
+| :--- | :--- |
+| IP、默认路由、IP ping、域名 ping 和 `apt update` 成功 | `imgs/lab3_network.png` |
+| `nproc`、`free -h`、`lsblk`、`df -h /` 输出 | `imgs/lab3_resources.png` |
+| MobaXterm SSH 会话登录成功，能看到远程终端中 `whoami`、`hostname`、`hostname -I` 的输出 | `imgs/lab3_mobaxterm.png` |
 | VSCode 通过 Remote-SSH 连接成功（左下角显示 SSH 主机名，打开远程文件夹，远程终端有 `uname -a` 输出） | `imgs/lab3_vscode_remote.png` |
 
 ---
@@ -767,7 +765,7 @@ sudo apt update
         └── lab3_vscode_remote.png
 ```
 
-> **注意**：`imgs` 全部小写；文件夹名和截图文件名区分大小写，必须与上面完全一致，否则图片引用会失效。>   
+> **注意**：`imgs` 全部小写；文件夹名和截图文件名区分大小写，必须与上面完全一致，否则图片引用会失效。
 > 文件名里的分隔符是**下划线 `_`**，不是减号 `-`：要写 `lab3_network.png`，不要写成 `lab3-network.png`。
 >
 > **只提交上面列出的文件。** 本作业只有 `Lab3.md` 和 4 张截图，不需要提交任何其他文件。提交前用 `git status` 确认变更文件只有上面这 5 个。
