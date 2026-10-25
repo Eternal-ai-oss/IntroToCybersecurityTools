@@ -62,7 +62,7 @@
 | Everything | 全盘文件名秒搜 | 已安装 | 在全盘搜索 `Lab4.md`，输入后结果毫秒级出现，顺便确认了作业文件在 `homework\Lab4` 里 |
 | Geek Uninstaller | 干净卸载软件 | 已安装 | 打开后浏览了一遍本机已安装程序列表，看到联想电脑管家、QuickLook、Everything 等条目，并确认了每项的大小与安装日期 |
 | WizTree | 秒扫磁盘空间占用 | 已安装 | 选中 C 盘扫描，几秒钟出结果，方块图里一眼看出占用最大的是系统目录与虚拟机镜像文件 |
-| 油猴（Tampermonkey） | 浏览器用户脚本管理器 | 已安装 | 在 Edge 加载项里装好，并在 Greasy Fork 装了一个脚本，刷新页面确认脚本生效 |
+| 油猴（Tampermonkey） | 浏览器用户脚本管理器 | 未安装 | 未安装 |
 | LocalSend | 局域网内跨设备传文件 | 未安装 | 未安装 |
 | 7-Zip | 压缩与解压缩 | 已安装 | 用右键菜单把“文档\Lab4压缩测试”文件夹压成 7z，再解压到一个新文件夹，逐个比对文件 |
 | Snipaste | 截图与贴图 | 未安装 | 未安装 |
@@ -185,9 +185,9 @@ Everything、Geek Uninstaller、WizTree 三款软件**必须安装**，并分别
 
 | 项目 | 内容 |
 | --- | --- |
-| 安装的脚本名称 | （待补：在 Greasy Fork 选中脚本并装好后填脚本名） |
+| 安装的脚本名称 | 未安装（本次时间不足，未完成） |
 | 安装脚本使用的网站 | https://greasyfork.org/zh-CN |
-| 安装的 Edge 插件名称 | （待补：从 edge://extensions 装好插件后填插件名） |
+| 安装的 Edge 插件名称 | 未安装（本次时间不足，未完成） |
 
 ### 4.6 设置浏览器主页与默认搜索引擎
 
@@ -292,8 +292,8 @@ GitHub Student Developer Pack 是 GitHub 面向学生的福利包，包含 GitHu
 
 | 项目 | 申请状态 | 一句话说明（审核中、遇到的问题等） |
 | --- | --- | --- |
-| JetBrains 学生授权 | （待补：提交后填 已通过 / 审核中 / 失败） | 已用 edu 邮箱在 account.jetbrains.com 注册，并在学生计划页面选择 University email address 提交申请 |
-| GitHub 学生开发包 | （待补：提交后填 已通过 / 审核中 / 失败） | 已在 Settings → Emails 添加 edu 邮箱，并在 education.github.com 提交学生包申请 |
+| JetBrains 学生授权 | 未提交 | 未提交申请，本次时间不足，未完成 |
+| GitHub 学生开发包 | 未提交 | 未提交申请，当晚 github.com 与 education.github.com 均无法访问，网络不通 |
 
 本节不要求截图，也不要求审核已经通过——**用 edu 邮箱把两个申请都提交，并如实填写状态，即算完成**。两个账号请保管好账号和密码，后面的课程会用到。
 
