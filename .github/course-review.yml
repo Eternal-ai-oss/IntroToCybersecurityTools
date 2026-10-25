@@ -162,7 +162,7 @@ assignments:
       - 截图必须来自学生本人的 Kali 虚拟机，两张远程连接截图中的 IP 与报告填写的 IP 一致或为同一虚拟机的合理变化；必须由电脑截图功能生成，出现手机拍屏反光、倾斜或关键文字无法辨认时判为不合格。
   Lab4:
     enabled: true
-    deadline: "2026-10-26T00:00:00+08:00"
+    deadline: "2026-10-27T00:00:00+08:00"
     # 行数与字符数量由 template_metrics 检查，与 Lab2、Lab3 相同口径
     min_nonempty_lines: 0
     allow_extra_files: false
