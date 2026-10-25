@@ -12,7 +12,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 环境地址 | https://challenge-385bc4ce175453a7e.sandbox.ctfhub.com:10800/phpinfo.php |
-| Flag | ctfhub{b1354ceb7d5d41c94b7eea301} |
+| Flag | ctfhub{193d5db7d5ddc394bd67ea30} |
 
 ## 解题过程
 
@@ -32,7 +32,7 @@ Variable              Value
 APACHE_RUN_DIR        /var/run/apache2
 APACHE_LOG_DIR        /var/log/apache2
 APACHE_RUN_USER       www-data
-FLAG                  ctfhub{b1354ceb7d5d41c94b7eea301}
+FLAG                  ctfhub{193d5db7d5ddc394bd67ea30}
 
 （响应体 PHP Variables 一节）
 $_SERVER['HTTP_HOST']    challenge-385bc4ce175453a7e.sandbox.ctfhub.com:10800

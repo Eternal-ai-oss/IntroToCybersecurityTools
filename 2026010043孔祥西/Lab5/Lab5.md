@@ -181,7 +181,7 @@ Content-Type: text/html
 | 题目 | CTFHub 路径 | WP 文件 | Flag |
 | --- | --- | --- | --- |
 | 目录遍历 | 信息泄露 → 目录遍历 | [wp_dir_traversal.md](wp/wp_dir_traversal.md) | ctfhub{20160ad52ea9438449fac1a0} |
-| PHPINFO | 信息泄露 → PHPINFO | [wp_phpinfo.md](wp/wp_phpinfo.md) | ctfhub{b1354ceb7d5d41c94b7eea301} |
+| PHPINFO | 信息泄露 → PHPINFO | [wp_phpinfo.md](wp/wp_phpinfo.md) | ctfhub{193d5db7d5ddc394bd67ea30} |
 | 请求方式 | Web 前置技能 → HTTP 协议 → 请求方式 | [wp_http_method.md](wp/wp_http_method.md) | ctfhub{8c13107b8cf1e51c40ba2109} |
 | 302 跳转 | Web 前置技能 → HTTP 协议 → 302 跳转 | [wp_redirect_302.md](wp/wp_redirect_302.md) | ctfhub{4a7114d2e7922f0464063829} |
 | Cookie | Web 前置技能 → HTTP 协议 → Cookie | [wp_cookie.md](wp/wp_cookie.md) | ctfhub{562beea6169241eae130ffa0} |
