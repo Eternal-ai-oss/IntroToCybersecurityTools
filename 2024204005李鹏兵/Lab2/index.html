@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大学生网络安全常识</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-dark: #123a94;
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --danger: #dc2626;
+    --warn-bg: #fef2f2;
+    --ok: #059669;
+    --ok-bg: #ecfdf5;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+  }
+  header {
+    background: linear-gradient(135deg, #123a94 0%, #1a56db 55%, #3b82f6 100%);
+    color: #fff;
+    padding: 64px 20px 56px;
+    text-align: center;
+  }
+  header .shield { margin-bottom: 12px; }
+  header h1 { font-size: 2.1rem; letter-spacing: 2px; }
+  header p { margin-top: 10px; opacity: .9; font-size: 1.05rem; }
+  .badge-row { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 4px 14px; border-radius: 999px; font-size: .88rem;
+  }
+  main { max-width: 960px; margin: 0 auto; padding: 40px 20px 60px; }
+  section { margin-bottom: 48px; }
+  h2 {
+    font-size: 1.45rem; color: var(--primary-dark);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+  }
+  h2 .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 10px;
+    background: var(--primary); color: #fff; font-size: 1rem; flex: none;
+  }
+  .lead { color: var(--muted); margin-bottom: 18px; }
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 22px 24px; margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(17, 38, 84, .07);
+  }
+  .card h3 { font-size: 1.08rem; margin-bottom: 8px; color: var(--text); }
+  ul { padding-left: 1.4em; }
+  li { margin: 6px 0; }
+  .good li::marker { color: var(--ok); }
+  .bad li::marker { color: var(--danger); }
+  .tag {
+    display: inline-block; font-size: .8rem; padding: 2px 10px;
+    border-radius: 999px; margin-right: 8px; vertical-align: 2px;
+  }
+  .tag-do { background: var(--ok-bg); color: var(--ok); border: 1px solid #a7f3d0; }
+  .tag-dont { background: var(--warn-bg); color: var(--danger); border: 1px solid #fecaca; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+  th { background: #eef3fb; color: var(--primary-dark); }
+  tr:last-child td { border-bottom: none; }
+  .phish-demo { font-family: Consolas, monospace; font-size: .92rem; }
+  .phish-demo .marker { color: var(--danger); font-weight: bold; }
+  .quiz { border-left: 4px solid var(--primary); }
+  .quiz q { display: block; font-weight: bold; margin-bottom: 10px; }
+  .quiz button {
+    display: block; width: 100%; text-align: left; margin: 8px 0;
+    padding: 10px 14px; border: 1px solid #d7dfeb; border-radius: 10px;
+    background: #fff; cursor: pointer; font-size: .95rem; font-family: inherit;
+    transition: all .15s ease;
+  }
+  .quiz button:hover { border-color: var(--primary); background: #f0f5ff; }
+  .quiz button.correct { border-color: var(--ok); background: var(--ok-bg); color: var(--ok); font-weight: bold; }
+  .quiz button.wrong { border-color: var(--danger); background: var(--warn-bg); color: var(--danger); }
+  .quiz .explain { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 10px; background: #eef3fb; color: var(--primary-dark); font-size: .92rem; }
+  .quiz .explain.show { display: block; }
+  footer {
+    text-align: center; color: var(--muted);
+    padding: 26px 20px 40px; font-size: .88rem;
+  }
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    main { padding: 28px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shield">
+    <svg width="72" height="72" viewBox="0 0 64 64" role="img" aria-label="安全盾牌图标">
+      <path d="M32 4 L54 12 V30 C54 45 44 55 32 60 C20 55 10 45 10 30 V12 Z" fill="#ffffff" opacity="0.95"/>
+      <path d="M32 10 L48 16 V30 C48 41 41 49 32 54 C23 49 16 41 16 30 V16 Z" fill="#1a56db"/>
+      <path d="M22 31 L29 38 L43 22" stroke="#ffffff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h1>大学生网络安全常识</h1>
+  <p>守护密码、识破钓鱼、保护个人信息 —— 从今天的三件小事做起</p>
+  <div class="badge-row">
+    <span class="badge">🔐 密码安全</span>
+    <span class="badge">🎣 钓鱼识别</span>
+    <span class="badge">🛡️ 个人信息保护</span>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <h2><span class="num">1</span>密码安全：一把钥匙配一把锁</h2>
+    <p class="lead">弱密码是黑客最省力的入口。好密码的核心不是"复杂到记不住"，而是"每个账户都不一样，且足够长"。</p>
+    <div class="grid">
+      <div class="card">
+        <h3><span class="tag tag-do">应该做</span>这样设置密码</h3>
+        <ul class="good">
+          <li>长度至少 <strong>12 位</strong>，越长越难破解</li>
+          <li>使用"短语拼接法"：如 <em> chai+he+2026!ShanBei </em> 风格，好记又长</li>
+          <li>重要账户（支付、邮箱、校园系统）<strong>开启双重验证（2FA）</strong></li>
+          <li>使用密码管理器，为每个账户生成独立随机密码</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="tag tag-dont">不要做</span>这些常见错误</h3>
+        <ul class="bad">
+          <li>所有网站共用同一个密码——一处泄露，全网失守</li>
+          <li>使用生日、学号、手机号、姓名拼音做密码</li>
+          <li>使用 <em>123456</em>、<em>password</em>、<em>qwerty</em> 等常见弱口令</li>
+          <li>把密码写在便签上贴在电脑旁，或发到聊天群里</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>识别钓鱼消息：三查一不点</h2>
+    <p class="lead">钓鱼短信、假冒老师和"客服"是大学生受骗的重灾区。记住口诀：<strong>查发件人、查链接、查 urgency，不点不明链接。</strong></p>
+    <div class="card phish-demo">
+      <h3>🔍 实例剖析：一封典型的钓鱼短信</h3>
+      <table>
+        <tr><th>钓鱼特征</th><th>示例原文</th><th>破绽</th></tr>
+        <tr><td>假冒官方</td><td>【校园卡服务中心】</td><td>官方通知一般通过校内系统或辅导员发布</td></tr>
+        <tr><td>制造紧迫</td><td>您的账户<span class="marker">2小时内将被冻结</span></td><td>逼你来不及思考，越急越假</td></tr>
+        <tr><td>山寨链接</td><td>hxxp://xiaoyuanka<span class="marker">-fufei</span>.xyz</td><td>域名怪异，.xyz 结尾，仿冒官方域名</td></tr>
+        <tr><td>索要信息</td><td>请填写卡号、密码和<span class="marker">验证码</span></td><td>任何索要密码、验证码的都是骗子</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>✅ 遇到可疑消息时的正确做法</h3>
+      <ul class="good">
+        <li>不点击短信、邮件、群文件里的不明链接</li>
+        <li>通过<strong>官方 App 或官方电话</strong>核实，而不是回拨短信里的号码</li>
+        <li>"老师"在群里让你转账缴费？先当面或电话向本人确认</li>
+        <li>凡是以"刷单返利""解冻账户""屏幕共享指导操作"开头的，直接拉黑举报</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>个人信息保护：少晒、慎填、勤查</h2>
+    <p class="lead">你的姓名 + 学号 + 手机号的组合，在黑产手里足以拼出精准的诈骗剧本。</p>
+    <div class="grid">
+      <div class="card">
+        <h3>📱 社交媒体</h3>
+        <ul>
+          <li>不晒含<strong>学生证、火车票、准考证、登机牌</strong>的照片（含条码和学号）</li>
+          <li>关闭"附近的人""可通过手机号找到我"等发现方式</li>
+          <li>定位、宿舍门牌、课表截图都可能暴露行踪</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📝 填表与注册</h3>
+        <ul>
+          <li>扫码填问卷送礼品？先问：<strong>谁在收集、要我的什么信息、用来干什么</strong></li>
+          <li>非必要不提供身份证号；必须提供时确认对方资质</li>
+          <li>注册不重要的网站可用"小号邮箱"，避免主邮箱被拖库</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>💻 设备与公共网络</h3>
+        <ul>
+          <li>电脑手机设置锁屏密码，离开工位随手锁屏</li>
+          <li>公共 Wi-Fi 不登录网银、支付类应用</li>
+          <li>二手出清设备前彻底擦除数据，打印店打印后及时删除文件</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>小测验：你能不能识破骗局？</h2>
+    <p class="lead">点击选项即时判断，试试你的"安全直觉"。</p>
+    <div class="card quiz" id="quiz1">
+      <q>收到短信："【教务处】您的奖学金已审批，请于今日 18 点前点击 t.cn/xxxxx 认领，逾期作废。"你应该？</q>
+      <button data-answer="wrong">马上点开链接，怕奖学金没了</button>
+      <button data-answer="correct">不点击，先在学校官方网站或向辅导员核实</button>
+      <button data-answer="wrong">转发到班级群让大家帮忙看看能不能点</button>
+      <div class="explain">✅ 正确答案：任何"限时认领 + 短链 + 假冒官方"三件套都是典型钓鱼特征。奖学金发放不需要你点外部链接，务必通过官方渠道核实。</div>
+    </div>
+    <div class="card quiz" id="quiz2">
+      <q>同学借你的电脑"查个资料"，你最应该注意什么？</q>
+      <button data-answer="wrong">没关系，反正都是同学</button>
+      <button data-answer="correct">锁定屏幕或暂时登出账号，回来后再检查登录记录</button>
+      <button data-answer="wrong">把密码告诉对方，显得大方一点</button>
+      <div class="explain">✅ 正确答案：设备可以借，账号不能"裸奔"。锁屏 / 登出是最简单的防护；事后查看账号登录记录，发现异常立即改密码。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>遇到网络安全事件怎么办</h2>
+    <div class="card">
+      <table>
+        <tr><th>情况</th><th>第一步</th><th>后续处理</th></tr>
+        <tr><td>账号被盗</td><td>立即修改密码并开启 2FA</td><td>检查登录设备与授权，通知好友谨防冒充</td></tr>
+        <tr><td>被骗转账</td><td>立即拨打 <strong>110 / 96110</strong> 报警</td><td>保留聊天记录、转账凭证，联系银行止付</td></tr>
+        <tr><td>电脑疑似中病毒</td><td>断网，进入安全模式</td><td>全盘杀毒，重要数据备份后再处理</td></tr>
+        <tr><td>信息泄露</td><td>修改相关账户密码</td><td>关注异常短信和来电，必要时挂失证件</td></tr>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  大学生网络安全常识 · 本页面由单文件 HTML 制作，样式与脚本均内嵌于本文件中<br>
+  国家反诈中心热线：96110 · 遇事不慌，先核实，再行动
+</footer>
+
+<script>
+  document.querySelectorAll('.quiz').forEach(function (quiz) {
+    var buttons = quiz.querySelectorAll('button');
+    var explain = quiz.querySelector('.explain');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        buttons.forEach(function (b) { b.classList.remove('correct', 'wrong'); });
+        btn.classList.add(btn.dataset.answer === 'correct' ? 'correct' : 'wrong');
+        explain.classList.add('show');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

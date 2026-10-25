@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="面向大学生的网络安全科普：密码安全、识别钓鱼消息、个人信息保护与被骗后的应急处理。">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f5cf6'/%3E%3Cpath d='M32 12l16 7v12c0 10-6.6 19.2-16 22-9.4-2.8-16-12-16-22V19l16-7z' fill='none' stroke='white' stroke-width='3.5' stroke-linejoin='round'/%3E%3Cpath d='M24 32l6 6 11-12' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<title>大学生网络安全常识｜密码 · 钓鱼 · 个人信息</title>
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root{
+    --bg:#f5f7fb;
+    --surface:#ffffff;
+    --ink:#101828;
+    --ink-2:#344054;
+    --muted:#667085;
+    --line:#e4e9f2;
+    --brand:#2f5cf6;
+    --brand-deep:#1e3fbf;
+    --brand-soft:#edf2ff;
+    --teal:#0e9f8a;
+    --teal-soft:#e7f8f4;
+    --warn:#d94a36;
+    --warn-soft:#fdeeeb;
+    --amber:#c47b12;
+    --amber-soft:#fdf4e5;
+    --radius:20px;
+    --shadow:0 18px 40px -24px rgba(16,24,40,.28);
+    --max:1120px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+
+  html{
+    scroll-behavior:smooth;
+    -webkit-text-size-adjust:100%;
+  }
+
+  body{
+    margin:0;
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 520px at 88% -6%, #e4ecff 0%, rgba(228,236,255,0) 62%),
+      radial-gradient(720px 480px at 2% 4%, #e4f8f1 0%, rgba(228,248,241,0) 58%),
+      var(--bg);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  ::selection{background:#cbd9ff;color:#101828;}
+
+  a{color:var(--brand);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  img,svg{max-width:100%;}
+  button{font:inherit;}
+
+  .container{
+    width:min(var(--max), calc(100% - 48px));
+    margin-inline:auto;
+  }
+
+  .skip-link{
+    position:fixed;left:16px;top:-60px;z-index:200;
+    background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;
+    transition:top .2s ease;
+  }
+  .skip-link:focus{top:12px;}
+
+  :focus-visible{
+    outline:3px solid rgba(47,92,246,.45);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+
+  .sr-only{
+    position:absolute !important;
+    width:1px;height:1px;
+    padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);
+    white-space:nowrap;border:0;
+  }
+
+  /* ---------- scroll progress ---------- */
+  .scroll-progress{
+    position:fixed;top:0;left:0;height:3px;width:0;
+    background:linear-gradient(90deg,var(--brand),#5b9bff 46%,var(--teal));
+    z-index:120;
+    transition:width .1s linear;
+  }
+
+  /* ---------- navigation ---------- */
+  .site-nav{
+    position:sticky;top:0;z-index:80;
+    background:rgba(245,247,251,.82);
+    -webkit-backdrop-filter:saturate(180%) blur(16px);
+    backdrop-filter:saturate(180%) blur(16px);
+    border-bottom:1px solid rgba(228,233,242,.9);
+  }
+  .nav-inner{
+    width:min(var(--max), calc(100% - 48px));
+    margin-inline:auto;
+    min-height:72px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:11px;color:var(--ink);
+    text-decoration:none;flex-shrink:0;
+  }
+  .brand:hover{text-decoration:none;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:12px;
+    display:grid;place-items:center;
+    background:linear-gradient(145deg,#315ff8,#1d3db2);
+    color:#fff;
+    box-shadow:0 8px 18px -8px rgba(47,92,246,.8);
+  }
+  .brand-mark svg{width:21px;height:21px;}
+  .brand-text{display:flex;flex-direction:column;line-height:1.25;font-size:14.5px;font-weight:800;letter-spacing:.02em;}
+  .brand-text small{font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:.14em;margin-top:2px;}
+
+  .nav-links{display:flex;align-items:center;gap:30px;}
+  .nav-links a{
+    position:relative;color:var(--ink-2);font-size:14px;font-weight:600;text-decoration:none;
+    padding:6px 0;transition:color .2s ease;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:50%;bottom:-1px;width:4px;height:4px;border-radius:50%;
+    background:var(--brand);transform:translateX(-50%) scale(0);transition:transform .2s ease;
+  }
+  .nav-links a:hover{color:var(--brand);}
+  .nav-links a:hover::after,
+  .nav-links a.active::after{transform:translateX(-50%) scale(1);}
+  .nav-links a.active{color:var(--brand);}
+
+  .nav-cta{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:9px 17px;border-radius:999px;
+    background:var(--ink);color:#fff;font-size:13px;font-weight:700;
+    text-decoration:none;white-space:nowrap;
+    transition:transform .2s ease,background .2s ease;
+  }
+  .nav-cta:hover{background:#1f2a44;text-decoration:none;transform:translateY(-1px);}
+
+  /* ---------- hero ---------- */
+  .hero{padding:70px 0 58px;position:relative;}
+  .hero-grid{
+    display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    margin:0;padding:7px 13px;border-radius:999px;
+    background:rgba(255,255,255,.76);
+    border:1px solid #dfe7f5;
+    color:var(--brand-deep);
+    font-size:11.5px;font-weight:700;letter-spacing:.12em;
+    box-shadow:0 6px 16px -12px rgba(16,24,40,.4);
+  }
+  .pulse-dot{
+    width:7px;height:7px;border-radius:50%;background:var(--teal);
+    box-shadow:0 0 0 0 rgba(14,159,138,.5);
+    animation:pulse 2.4s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(14,159,138,.45);}
+    70%{box-shadow:0 0 0 7px rgba(14,159,138,0);}
+    100%{box-shadow:0 0 0 0 rgba(14,159,138,0);}
+  }
+
+  .hero h1{
+    margin:24px 0 20px;
+    font-size:clamp(2.55rem,4.7vw,3.85rem);
+    line-height:1.12;
+    letter-spacing:-.025em;
+    font-weight:800;
+  }
+  .mark{
+    color:var(--brand-deep);
+    background:linear-gradient(180deg,transparent 60%, #cfe0ff 60%, #cfe0ff 91%, transparent 91%);
+    padding:0 3px;
+    white-space:nowrap;
+  }
+  .hero-lead{
+    margin:0;max-width:570px;
+    color:var(--ink-2);font-size:16px;line-height:1.85;
+  }
+  .hero-lead strong{color:var(--ink);font-weight:700;}
+
+  .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 22px;border-radius:12px;
+    font-size:14.5px;font-weight:700;
+    border:1px solid transparent;text-decoration:none;cursor:pointer;
+    transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease;
+  }
+  .btn svg{width:17px;height:17px;transition:transform .2s ease;}
+  .btn:hover{text-decoration:none;transform:translateY(-2px);}
+  .btn:hover svg{transform:translateX(2px);}
+  .btn-primary{
+    color:#fff;
+    background:linear-gradient(135deg,#3363ff,#2449d8);
+    box-shadow:0 14px 26px -14px rgba(47,92,246,.85);
+  }
+  .btn-primary:hover{box-shadow:0 18px 30px -14px rgba(47,92,246,.9);}
+  .btn-ghost{
+    color:var(--ink);background:rgba(255,255,255,.86);border-color:#dbe2ef;
+  }
+  .btn-ghost:hover{background:#fff;border-color:#c6d2e8;}
+
+  .hero-stats{
+    display:flex;gap:38px;margin:38px 0 0;padding-top:24px;
+    border-top:1px dashed #d9e1ef;
+  }
+  .hero-stats div{margin:0;}
+  .hero-stats dt{
+    font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+  }
+  .hero-stats dd{
+    margin:4px 0 0;font-size:12px;color:var(--muted);letter-spacing:.06em;font-weight:600;
+  }
+
+  .hero-art{position:relative;min-height:430px;}
+  .art-panel{
+    position:absolute;inset:0;
+    border-radius:30px;
+    background:linear-gradient(155deg,#ffffff 0%,#eff4ff 55%,#e9faf4 100%);
+    border:1px solid #e0e8f6;
+    box-shadow:0 32px 64px -34px rgba(29,61,178,.35);
+    overflow:hidden;
+  }
+  .art-panel::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(#c8d6f2 1px, transparent 1px);
+    background-size:18px 18px;
+    opacity:.5;
+    -webkit-mask-image:radial-gradient(circle at 50% 45%, #000 20%, transparent 72%);
+    mask-image:radial-gradient(circle at 50% 45%, #000 20%, transparent 72%);
+  }
+  .art-panel svg{position:absolute;inset:0;width:100%;height:100%;}
+  .orbit{transform-origin:220px 218px;animation:spin 42s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .float-pill{
+    position:absolute;z-index:2;
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 13px;border-radius:12px;
+    background:rgba(255,255,255,.94);
+    border:1px solid #e1e8f4;
+    box-shadow:0 14px 26px -18px rgba(16,24,40,.5);
+    font-size:12px;font-weight:700;color:var(--ink-2);
+    white-space:nowrap;
+    animation:float 6.5s ease-in-out infinite;
+  }
+  .float-pill svg{width:14px;height:14px;flex-shrink:0;}
+  .pill-a{top:26px;right:20px;}
+  .pill-b{bottom:76px;left:-14px;animation-delay:-2.2s;}
+  .pill-c{top:47%;right:-14px;animation-delay:-4.1s;}
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-7px);}
+  }
+
+  /* ---------- sections ---------- */
+  .section{padding:82px 0;border-top:1px solid rgba(222,229,241,.85);scroll-margin-top:88px;}
+  .section-head{
+    display:grid;grid-template-columns:1.02fr .98fr;gap:44px;align-items:end;
+    margin-bottom:38px;
+  }
+  .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    margin:0 0 14px;color:var(--brand);font-size:12px;font-weight:800;letter-spacing:.14em;
+  }
+  .kicker span{
+    display:grid;place-items:center;
+    width:26px;height:26px;border-radius:8px;
+    background:var(--brand-soft);border:1px solid #d8e2ff;
+    font-size:11px;letter-spacing:0;color:var(--brand-deep);
+  }
+  .section h2{
+    margin:0;
+    font-size:clamp(1.8rem,3.2vw,2.45rem);
+    line-height:1.24;
+    letter-spacing:-.02em;
+    font-weight:800;
+  }
+  .section-lead{
+    margin:0 0 5px;color:var(--muted);font-size:15px;line-height:1.9;max-width:480px;
+  }
+  .section-lead strong{color:var(--ink-2);font-weight:700;}
+
+  /* ---------- general cards ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:0 10px 30px -26px rgba(16,24,40,.4);
+  }
+
+  /* ---------- password principles ---------- */
+  .principle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .principle{
+    padding:26px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+  }
+  .principle:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#d5e0f5;}
+  .icon-box{
+    display:grid;place-items:center;width:44px;height:44px;border-radius:13px;
+    background:var(--brand-soft);color:var(--brand);
+  }
+  .icon-box svg{width:22px;height:22px;}
+  .principle h3{margin:17px 0 8px;font-size:17px;font-weight:800;letter-spacing:-.01em;}
+  .principle p{margin:0;color:var(--muted);font-size:14px;line-height:1.8;}
+  .tag{
+    display:inline-block;margin-top:15px;padding:3px 9px;border-radius:999px;
+    background:#f4f6fb;border:1px solid #e7ebf3;
+    color:var(--ink-2);font-size:11.5px;font-weight:700;
+  }
+
+  /* ---------- password tool ---------- */
+  .tool-card{
+    margin-top:24px;padding:30px;border-radius:24px;position:relative;overflow:hidden;
+  }
+  .tool-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg,var(--brand),#7ba4ff 45%,var(--teal));
+  }
+  .tool-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;}
+  .tool-eyebrow{
+    margin:0;font-size:10.5px;font-weight:800;letter-spacing:.16em;color:var(--teal);
+  }
+  .tool-head h3{margin:6px 0 0;font-size:21px;font-weight:800;letter-spacing:-.01em;}
+  .privacy-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 11px;border-radius:999px;white-space:nowrap;
+    background:var(--teal-soft);border:1px solid #c6eee6;
+    color:#087466;font-size:11.5px;font-weight:700;
+  }
+  .privacy-badge svg{width:13px;height:13px;}
+  .tool-hint{margin:11px 0 18px;color:var(--muted);font-size:13px;}
+
+  .pw-field{
+    display:flex;align-items:stretch;
+    border:1px solid #d7deec;border-radius:14px;overflow:hidden;
+    background:#fbfcff;
+    transition:border-color .2s ease,box-shadow .2s ease;
+  }
+  .pw-field:focus-within{border-color:#9db7ff;box-shadow:0 0 0 4px rgba(47,92,246,.1);}
+  .pw-field input{
+    flex:1;min-width:0;border:0;outline:0;background:transparent;
+    padding:15px 18px;color:var(--ink);font-size:16px;letter-spacing:.08em;
+    font-family:inherit;
+  }
+  .pw-field input::placeholder{color:#98a2b3;letter-spacing:0;font-size:14px;}
+  .pw-toggle{
+    flex-shrink:0;border:0;border-left:1px solid var(--line);
+    background:transparent;padding:0 18px;color:var(--brand-deep);
+    font-size:13px;font-weight:700;cursor:pointer;
+    transition:background .2s ease;
+  }
+  .pw-toggle:hover{background:var(--brand-soft);}
+
+  .meter{margin-top:16px;}
+  .meter-track{height:9px;border-radius:999px;background:#edf0f7;overflow:hidden;}
+  .meter-fill{
+    width:0;height:100%;border-radius:999px;background:#cbd5e1;
+    transition:width .4s cubic-bezier(.2,.7,.2,1),background .3s ease;
+  }
+  .meter-meta{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-top:8px;font-size:12.5px;color:var(--muted);
+  }
+  .meter-meta strong{color:var(--ink-2);}
+  #pw-score{font-variant-numeric:tabular-nums;font-weight:700;}
+
+  .rules{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+  .rule{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:4px 9px;border-radius:8px;
+    background:#f5f7fb;border:1px solid #e7ebf3;
+    color:#8791a3;font-size:11.5px;font-weight:600;
+    transition:all .2s ease;
+  }
+  .rule::before{content:"○";font-size:10px;}
+  .rule.met{background:var(--teal-soft);border-color:#c9eee6;color:#087466;}
+  .rule.met::before{content:"✓";}
+
+  .pw-advice{
+    margin:14px 0 0;padding:11px 14px;border-radius:10px;
+    background:#f7f9fd;border-left:3px solid #c9d8ff;
+    color:var(--ink-2);font-size:13px;line-height:1.7;
+  }
+  .pw-advice[data-tone="warn"]{background:var(--warn-soft);border-left-color:var(--warn);color:#8a2f22;}
+  .pw-advice[data-tone="good"]{background:var(--teal-soft);border-left-color:var(--teal);color:#086355;}
+
+  /* ---------- do / don't ---------- */
+  .dos-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;}
+  .list-card{padding:26px;}
+  .list-head{display:flex;align-items:center;gap:10px;}
+  .list-head .badge{
+    display:grid;place-items:center;width:28px;height:28px;border-radius:9px;
+    font-size:14px;font-weight:800;
+  }
+  .list-head h3{margin:0;font-size:16.5px;font-weight:800;}
+  .list-card.do .badge{background:var(--teal-soft);color:var(--teal);}
+  .list-card.dont .badge{background:var(--warn-soft);color:var(--warn);}
+  .list-card.do h3{color:#087466;}
+  .list-card.dont h3{color:#a83a29;}
+  .list-card ul{list-style:none;margin:16px 0 0;padding:0;}
+  .list-card li{
+    position:relative;padding-left:25px;margin:11px 0;
+    color:var(--ink-2);font-size:13.8px;line-height:1.75;
+  }
+  .list-card li::before{
+    position:absolute;left:0;top:0;font-weight:800;font-size:13px;
+  }
+  .list-card.do li::before{content:"✓";color:var(--teal);}
+  .list-card.dont li::before{content:"✕";color:var(--warn);}
+  .list-card li strong{color:var(--ink);}
+
+  /* ---------- phishing ---------- */
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .step{padding:22px;position:relative;overflow:hidden;}
+  .step-no{
+    font-size:11px;font-weight:800;letter-spacing:.15em;color:var(--brand);
+    display:flex;align-items:center;gap:8px;
+  }
+  .step-no::after{content:"";height:1px;flex:1;background:#e6ebf5;}
+  .step h3{margin:10px 0 6px;font-size:18px;font-weight:800;}
+  .step p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.8;}
+
+  .phish-lab{
+    margin-top:24px;padding:28px;border-radius:24px;
+    display:grid;grid-template-columns:.9fr 1.1fr;gap:32px;align-items:start;
+  }
+  .lab-title{margin:0 0 4px;font-size:15px;font-weight:800;}
+  .lab-sub{margin:0 0 18px;font-size:12.5px;color:var(--muted);}
+
+  .phone{
+    width:100%;max-width:352px;margin:0 auto;
+    padding:12px;border-radius:26px;
+    background:#111a2c;
+    box-shadow:0 26px 50px -28px rgba(16,24,40,.75);
+  }
+  .phone-screen{
+    border-radius:18px;background:#f1f4f9;padding:12px 12px 16px;
+    min-height:360px;position:relative;
+  }
+  .phone-status{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:10px;font-weight:700;color:#667085;padding:1px 4px 10px;
+  }
+  .phone-status .dots{letter-spacing:2px;font-size:8px;}
+  .phone-contact{
+    display:flex;align-items:center;gap:9px;padding:5px 2px 12px;
+    border-bottom:1px solid #dfe5ef;
+  }
+  .phone-avatar{
+    display:grid;place-items:center;width:32px;height:32px;border-radius:50%;
+    background:#dfe6f4;color:#48536b;font-size:11px;font-weight:800;
+  }
+  .phone-contact strong{display:block;font-size:11.5px;color:#344054;}
+  .phone-contact small{display:block;font-size:9.5px;color:#8a94a6;margin-top:1px;}
+  .msg-bubble{
+    margin-top:12px;padding:13px 14px;border-radius:4px 14px 14px 14px;
+    background:#fff;border:1px solid #e3e8f1;
+    font-size:12.6px;line-height:1.9;color:#2f3a4d;
+  }
+  .msg-bubble mark{background:#fff1cf;color:#5f430e;padding:0 2px;border-radius:3px;}
+  .phone-time{text-align:center;font-size:9.5px;color:#98a2b3;margin-top:12px;}
+
+  .flag{
+    display:inline-grid;place-items:center;
+    width:18px;height:18px;padding:0;margin:0 1px 0 3px;
+    border:0;border-radius:50%;
+    background:var(--warn);color:#fff;
+    font-size:10px;font-weight:800;line-height:1;
+    vertical-align:super;cursor:pointer;
+    box-shadow:0 0 0 3px rgba(217,74,54,.14);
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .flag:hover{transform:scale(1.14);box-shadow:0 0 0 5px rgba(217,74,54,.16);}
+  .flag.is-pulse{animation:flagPulse .6s ease;}
+  @keyframes flagPulse{
+    0%{transform:scale(1);}
+    40%{transform:scale(1.35);}
+    100%{transform:scale(1);}
+  }
+
+  .legend{list-style:none;margin:0;padding:0;}
+  .legend-row{
+    display:flex;gap:12px;align-items:flex-start;width:100%;
+    padding:11px 10px;border:0;border-bottom:1px dashed #e4e9f2;
+    background:transparent;text-align:left;cursor:pointer;border-radius:10px;
+    transition:background .2s ease;
+  }
+  .legend-row:last-child{border-bottom:0;}
+  .legend-row:hover,.legend-row.is-active{background:#fff8e9;}
+  .legend-row .num{
+    flex-shrink:0;display:grid;place-items:center;
+    width:23px;height:23px;border-radius:50%;
+    background:var(--warn-soft);color:var(--warn);
+    font-size:11px;font-weight:800;margin-top:1px;
+  }
+  .legend-row strong{display:block;font-size:13.5px;color:var(--ink);line-height:1.5;}
+  .legend-desc{display:block;margin-top:2px;font-size:12.5px;line-height:1.7;color:var(--muted);}
+
+  /* ---------- quiz ---------- */
+  .quiz-wrap{
+    margin-top:36px;padding:28px;border-radius:24px;
+  }
+  .quiz-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .quiz-head h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;}
+  .quiz-score{
+    padding:6px 13px;border-radius:999px;background:var(--brand-soft);
+    border:1px solid #dbe4ff;color:var(--brand-deep);
+    font-size:12.5px;font-weight:700;
+  }
+  .quiz-score strong{font-size:15px;font-variant-numeric:tabular-nums;}
+  .quiz-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;}
+
+  .quiz-card{
+    display:flex;flex-direction:column;
+    padding:18px;border-radius:16px;
+    border:1px solid #e3e8f2;background:#fbfcfe;
+    transition:border-color .2s ease,box-shadow .2s ease;
+  }
+  .quiz-card:hover{border-color:#ced9ec;box-shadow:0 10px 24px -22px rgba(16,24,40,.5);}
+  .quiz-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .quiz-source{font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:.01em;}
+  .quiz-index{font-size:10px;font-weight:800;letter-spacing:.12em;color:#a6b0c2;}
+  .quiz-msg{margin:9px 0 15px;font-size:13.6px;line-height:1.8;color:var(--ink-2);flex:1;}
+  .quiz-actions{display:flex;gap:8px;}
+  .choice{
+    flex:1;padding:8px 0;border-radius:9px;
+    border:1px solid #d8dfec;background:#fff;
+    color:var(--ink-2);font-size:13px;font-weight:700;cursor:pointer;
+    transition:all .18s ease;
+  }
+  .choice:hover:not(:disabled){border-color:#9db7ff;background:var(--brand-soft);color:var(--brand-deep);}
+  .choice:disabled{cursor:default;}
+  .choice.is-correct{background:#e7f8f1;border-color:#4fbd92;color:#086b4f;}
+  .choice.is-wrong{background:#fdecea;border-color:#e08a79;color:#a02f1e;}
+  .quiz-feedback{
+    margin-top:11px;padding:10px 12px;border-radius:9px;
+    background:#f2f5fb;color:var(--ink-2);
+    font-size:12.4px;line-height:1.75;
+  }
+  .quiz-feedback strong{margin-right:4px;}
+  .quiz-feedback[data-state="ok"]{background:#eaf9f3;color:#08614a;}
+  .quiz-feedback[data-state="bad"]{background:#fdf0ed;color:#8d3323;}
+  .quiz-footer{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    margin-top:16px;padding-top:14px;border-top:1px dashed #e2e8f2;
+  }
+  .quiz-footer p{margin:0;font-size:12.5px;color:var(--muted);}
+  .link-btn{
+    border:0;background:transparent;padding:0;cursor:pointer;
+    color:var(--brand);font-size:12.5px;font-weight:700;
+  }
+  .link-btn:hover{text-decoration:underline;}
+
+  /* ---------- privacy ---------- */
+  .data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .data-card{padding:22px;position:relative;overflow:hidden;}
+  .data-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#9fb0cc;}
+  .data-card.high::before{background:var(--warn);}
+  .data-card.mid::before{background:#d99a2b;}
+  .data-card.low::before{background:var(--teal);}
+  .data-level{
+    display:flex;align-items:center;gap:7px;
+    font-size:10.5px;font-weight:800;letter-spacing:.13em;
+  }
+  .data-card.high .data-level{color:#b03e2c;}
+  .data-card.mid .data-level{color:#9a630e;}
+  .data-card.low .data-level{color:#087466;}
+  .data-level i{width:6px;height:6px;border-radius:50%;background:currentColor;font-style:normal;}
+  .data-card h3{margin:8px 0 4px;font-size:15.5px;font-weight:800;}
+  .data-card > p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.65;}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+  .tags span{
+    padding:3px 7px;border-radius:6px;background:#f4f6fa;
+    border:1px solid #e9edf4;color:var(--ink-2);
+    font-size:11px;line-height:1.5;
+  }
+
+  .habit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;}
+  .habit{display:flex;gap:15px;padding:22px;}
+  .habit .icon-box{flex-shrink:0;width:40px;height:40px;border-radius:11px;background:var(--teal-soft);color:var(--teal);}
+  .habit .icon-box svg{width:20px;height:20px;}
+  .habit h3{margin:0 0 5px;font-size:15.5px;font-weight:800;}
+  .habit p{margin:0;font-size:13px;line-height:1.75;color:var(--muted);}
+  .habit p strong{color:var(--ink-2);}
+
+  .check-card{margin-top:24px;padding:28px;border-radius:24px;}
+  .check-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;}
+  .check-head h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em;}
+  .check-head p{margin:5px 0 0;font-size:12.5px;color:var(--muted);}
+  .check-count{
+    display:flex;align-items:baseline;gap:4px;
+    padding:7px 14px;border-radius:12px;
+    background:#f3f6fc;border:1px solid #e4e9f2;
+    font-size:12px;color:var(--muted);font-weight:700;
+  }
+  .check-count strong{font-size:21px;line-height:1;color:var(--brand-deep);font-variant-numeric:tabular-nums;}
+  .check-progress{height:7px;border-radius:999px;background:#edf0f7;overflow:hidden;margin:17px 0 6px;}
+  .check-progress span{
+    display:block;width:0;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,#39b79f,#0e9f8a);
+    transition:width .35s ease;
+  }
+  .check-list{
+    list-style:none;margin:12px 0 0;padding:0;
+    display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;
+  }
+  .check-item label{
+    display:flex;align-items:flex-start;gap:11px;
+    padding:10px;border-radius:10px;cursor:pointer;
+    font-size:13.3px;line-height:1.65;color:var(--ink-2);
+    transition:background .18s ease;
+  }
+  .check-item label:hover{background:#f6f9fe;}
+  .check-item input{
+    flex-shrink:0;width:17px;height:17px;margin:4px 0 0;
+    accent-color:var(--teal);cursor:pointer;
+  }
+  .check-item input:checked + span{color:var(--ink);}
+  .check-foot{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    margin-top:12px;padding-top:12px;border-top:1px dashed #e4e9f2;
+  }
+  .check-foot p{margin:0;font-size:12.5px;color:var(--muted);}
+
+  /* ---------- emergency ---------- */
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;}
+  .em-step{padding:21px;position:relative;overflow:hidden;}
+  .em-step::before{
+    content:"";position:absolute;left:21px;top:0;width:32px;height:3px;border-radius:0 0 4px 4px;
+    background:linear-gradient(90deg,var(--brand),#7ba4ff);
+  }
+  .em-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .em-num{
+    display:grid;place-items:center;width:27px;height:27px;border-radius:9px;
+    background:var(--brand-soft);color:var(--brand-deep);
+    font-size:12px;font-weight:800;
+  }
+  .em-time{font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--muted);}
+  .em-step h3{margin:12px 0 6px;font-size:15.5px;font-weight:800;}
+  .em-step p{margin:0;font-size:12.5px;line-height:1.75;color:var(--muted);}
+
+  .hotline{
+    margin-top:22px;padding:26px 28px;border-radius:22px;
+    background:linear-gradient(135deg,#fff7f2 0%,#ffffff 62%,#f0f7ff 100%);
+    border:1px solid #f2ded4;
+    display:flex;align-items:center;justify-content:space-between;gap:26px;flex-wrap:wrap;
+  }
+  .hotline-copy h3{margin:0 0 4px;font-size:18px;font-weight:800;}
+  .hotline-copy p{margin:0;font-size:13px;color:var(--muted);max-width:430px;}
+  .hotline-numbers{display:flex;gap:10px;flex-wrap:wrap;}
+  .hotline-item{
+    padding:9px 15px;border-radius:12px;background:#fff;
+    border:1px solid #e9e2da;box-shadow:0 8px 18px -18px rgba(16,24,40,.5);
+  }
+  .hotline-item strong{display:block;font-size:18px;line-height:1.2;color:#a33c28;font-variant-numeric:tabular-nums;}
+  .hotline-item small{display:block;font-size:10.5px;color:var(--muted);margin-top:2px;}
+  .never-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .never-row span{
+    padding:5px 10px;border-radius:999px;background:#fff;border:1px solid #f0d9d2;
+    color:#9a3a29;font-size:12px;font-weight:700;
+  }
+
+  /* ---------- closing ---------- */
+  .closing{padding:20px 0 78px;}
+  .closing-card{
+    position:relative;overflow:hidden;
+    padding:52px;
+    border-radius:28px;
+    background:linear-gradient(135deg,#eef4ff 0%,#f7faff 46%,#e9faf4 100%);
+    border:1px solid #dde7f7;
+    box-shadow:0 30px 60px -44px rgba(29,61,178,.5);
+  }
+  .closing-card::after{
+    content:"";position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(47,92,246,.16),rgba(47,92,246,0) 68%);
+  }
+  .closing-card h2{
+    margin:0 0 12px;font-size:clamp(1.7rem,3vw,2.3rem);line-height:1.3;
+    letter-spacing:-.02em;font-weight:800;position:relative;z-index:1;
+  }
+  .closing-card p{
+    margin:0;max-width:600px;color:var(--ink-2);font-size:14.5px;line-height:1.9;
+    position:relative;z-index:1;
+  }
+  .closing-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;position:relative;z-index:1;}
+
+  footer{
+    border-top:1px solid var(--line);padding:28px 0 36px;
+  }
+  .footer-inner{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  }
+  .footer-brand{font-size:13px;font-weight:800;color:var(--ink);margin:0 0 5px;}
+  .footer-note{margin:0;font-size:11.5px;line-height:1.8;color:var(--muted);max-width:620px;}
+  .footer-mark{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:11px;color:var(--muted);
+  }
+  .footer-mark svg{width:14px;height:14px;color:var(--teal);}
+
+  /* ---------- reveal ---------- */
+  .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);}
+  .js .reveal.in{opacity:1;transform:none;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:960px){
+    .hero-grid{grid-template-columns:1fr;gap:36px;}
+    .hero-art{min-height:360px;max-width:560px;width:100%;margin-inline:auto;}
+    .pill-b{left:8px;}
+    .pill-c{right:8px;}
+    .section-head{grid-template-columns:1fr;gap:14px;align-items:start;}
+    .phish-lab{grid-template-columns:1fr;gap:24px;}
+    .phone{max-width:380px;}
+    .timeline{grid-template-columns:1fr 1fr;}
+    .nav-links{gap:20px;}
+  }
+
+  @media (max-width:760px){
+    .container,.nav-inner{width:calc(100% - 32px);}
+    .nav-links{display:none;}
+    .hero{padding:46px 0 42px;}
+    .hero h1{margin-top:20px;}
+    .hero-lead{font-size:14.8px;}
+    .hero-stats{gap:26px;}
+    .hero-stats dt{font-size:22px;}
+    .section{padding:58px 0;}
+    .principle-grid,.data-grid,.steps-grid{grid-template-columns:1fr;}
+    .dos-grid,.habit-grid,.quiz-list,.check-list{grid-template-columns:1fr;}
+    .tool-card,.phish-lab,.quiz-wrap,.check-card{padding:20px;}
+    .tool-head{flex-direction:column;gap:10px;}
+    .closing-card{padding:32px 24px;}
+    .hotline{padding:22px;}
+    .timeline{grid-template-columns:1fr;}
+    .footer-inner{flex-direction:column;}
+  }
+
+  @media (max-width:480px){
+    .hero-stats{justify-content:space-between;gap:12px;}
+    .hero-stats dt{font-size:20px;}
+    .hero-stats dd{font-size:10.5px;letter-spacing:.02em;}
+    .float-pill{font-size:10.5px;padding:7px 10px;}
+    .pill-c{display:none;}
+    .hero-art{min-height:310px;}
+    .pw-toggle{padding:0 13px;font-size:12px;}
+    .pw-field input{padding:14px;font-size:15px;}
+    .phone-screen{min-height:340px;}
+    .never-row span{font-size:11px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    .js .reveal{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="回到页面顶部">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l7 3v5c0 4.4-2.9 8.4-7 9.7C7.9 19.4 5 15.4 5 11V6l7-3z"/>
+          <path d="M9.5 12l1.8 1.8 3.4-3.6"/>
+        </svg>
+      </span>
+      <span class="brand-text">网络安全<small>大学生手册</small></span>
+    </a>
+
+    <nav class="nav-links" aria-label="页面导航">
+      <a href="#passwords">密码安全</a>
+      <a href="#phishing">识别钓鱼</a>
+      <a href="#privacy">信息保护</a>
+      <a href="#response">应急指南</a>
+    </nav>
+
+    <a class="nav-cta" href="#quiz">3 分钟自测</a>
+  </div>
+</header>
+
+<main id="main">
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>校园安全 · 数字生活第一课</p>
+        <h1>你的账号，<br>比你想的<span class="mark">更值钱</span>。</h1>
+        <p class="hero-lead">
+          一条“教务处”短信、一次密码复用、一张没打码的晒图，都可能是风险的入口。
+          花 10 分钟，把三件事弄明白：<strong>密码怎么设、钓鱼怎么辨、信息怎么守。</strong>
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#passwords">
+            开始阅读
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#response">中招了怎么办</a>
+        </div>
+        <dl class="hero-stats">
+          <div><dt>3</dt><dd>个核心主题</dd></div>
+          <div><dt>4</dt><dd>道钓鱼自测</dd></div>
+          <div><dt>7</dt><dd>项隐私体检</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-panel">
+          <svg viewBox="0 0 440 440" role="img" aria-label="盾牌与锁的安全插画">
+            <defs>
+              <linearGradient id="shieldFill" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffffff"/>
+                <stop offset="1" stop-color="#e8f0ff"/>
+              </linearGradient>
+              <linearGradient id="shieldStroke" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5b86ff"/>
+                <stop offset="1" stop-color="#1d3db2"/>
+              </linearGradient>
+              <linearGradient id="lockFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3c6bff"/>
+                <stop offset="1" stop-color="#1f43c4"/>
+              </linearGradient>
+              <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#9fc0ff" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#9fc0ff" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <circle cx="220" cy="215" r="168" fill="url(#glow)"/>
+            <circle class="orbit" cx="220" cy="218" r="154" fill="none" stroke="#b9cbef" stroke-width="1" stroke-dasharray="5 10"/>
+            <circle cx="220" cy="218" r="122" fill="#ffffff" opacity=".42"/>
+
+            <circle cx="220" cy="64" r="6" fill="#0e9f8a"/>
+            <circle cx="356" cy="252" r="5" fill="#2f5cf6"/>
+            <circle cx="108" cy="296" r="4" fill="#e0a33a"/>
+
+            <path d="M220 76 L334 118 V208 C334 288 286 342 220 368 C154 342 106 288 106 208 V118 Z"
+                  fill="url(#shieldFill)" stroke="url(#shieldStroke)" stroke-width="2.4"/>
+            <path d="M220 96 L314 131 V207 C314 274 274 320 220 343 C166 320 126 274 126 207 V131 Z"
+                  fill="none" stroke="#dbe6fb" stroke-width="1.2"/>
+
+            <path d="M197 210 v-18 a23 23 0 0 1 46 0 v18"
+                  fill="none" stroke="#1f43c4" stroke-width="8" stroke-linecap="round"/>
+            <rect x="184" y="207" width="72" height="61" rx="15" fill="url(#lockFill)"/>
+            <circle cx="220" cy="232" r="6.5" fill="#ffffff"/>
+            <path d="M220 238 v12" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+
+            <g stroke="#c2d2f0" stroke-width="1.2">
+              <path d="M74 160 h24"/><path d="M86 148 v24"/>
+              <path d="M358 138 h20"/><path d="M368 128 v20"/>
+              <path d="M330 330 h24"/><path d="M342 318 v24"/>
+            </g>
+          </svg>
+        </div>
+        <div class="float-pill pill-a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0e9f8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          已开启双因素认证
+        </div>
+        <div class="float-pill pill-b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#d94a36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          可疑链接 · 已拦截
+        </div>
+        <div class="float-pill pill-c">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2f5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          重要账号不复用
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 密码安全 -->
+  <section class="section" id="passwords">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker"><span>01</span>密码安全</p>
+          <h2>先让攻击者<br>猜不到你的密码</h2>
+        </div>
+        <p class="section-lead">
+          密码不是越难记越好，而是<strong>越难猜越好</strong>。大多数账号被盗，不是因为黑客盯上了你，
+          而是因为密码太短、太常见，或者在多个网站重复使用。
+        </p>
+      </div>
+
+      <div class="principle-grid">
+        <article class="card principle reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><rect x="2" y="8" width="20" height="12" rx="3"/><path d="M8 14h8"/></svg>
+          </div>
+          <h3>够长：12 位起步</h3>
+          <p>长度是抵抗暴力破解的第一道门槛。与其把 8 位密码改得花里胡哨，不如直接把它变成 14 位。</p>
+          <span class="tag">长度优先于复杂度</span>
+        </article>
+
+        <article class="card principle reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="7" height="11" rx="2"/><rect x="14" y="3" width="7" height="18" rx="2"/><path d="M6 14h1"/><path d="M17 7h1"/></svg>
+          </div>
+          <h3>不复用：一号一密</h3>
+          <p>一个网站泄露，攻击者会拿同一组账号密码去撞其他平台。邮箱、支付、校园系统必须各不相同。</p>
+          <span class="tag">防止撞库连锁失守</span>
+        </article>
+
+        <article class="card principle reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-2.9 8.4-7 9.7C7.9 19.4 5 15.4 5 11V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
+          </div>
+          <h3>多一层：开启 2FA</h3>
+          <p>密码之外再加一道验证。即使密码泄露，攻击者也难以登录。优先用验证器 App 或通行密钥，其次才是短信。</p>
+          <span class="tag">双因素认证</span>
+        </article>
+      </div>
+
+      <div class="card tool-card reveal">
+        <div class="tool-head">
+          <div>
+            <p class="tool-eyebrow">本地小工具</p>
+            <h3>测一测：你的密码有多难猜？</h3>
+          </div>
+          <span class="privacy-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            不上传 · 不保存
+          </span>
+        </div>
+        <p class="tool-hint">请勿输入真实密码。可以输入一个示例口令，看看它会被如何评估。</p>
+
+        <div class="pw-field">
+          <label for="pw-input" class="sr-only">输入示例密码</label>
+          <input id="pw-input" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例如：coffee-Desk-42" aria-describedby="pw-advice">
+          <button id="pw-toggle" class="pw-toggle" type="button" aria-pressed="false" aria-label="显示密码">显示</button>
+        </div>
+
+        <div class="meter">
+          <div class="meter-track" role="progressbar" aria-label="密码强度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pw-meter">
+            <div class="meter-fill" id="meter-fill"></div>
+          </div>
+          <div class="meter-meta">
+            <span>强度：<strong id="pw-level">等待输入</strong></span>
+            <span id="pw-score">0 / 100</span>
+          </div>
+        </div>
+
+        <div class="rules" aria-label="密码规则检查">
+          <span class="rule" data-rule="length">长度 ≥ 12 位</span>
+          <span class="rule" data-rule="mix">含大小写字母</span>
+          <span class="rule" data-rule="digit">含数字</span>
+          <span class="rule" data-rule="symbol">含符号</span>
+          <span class="rule" data-rule="uncommon">不含常见词/序列</span>
+        </div>
+
+        <p class="pw-advice" id="pw-advice" aria-live="polite">好口令的一个思路：把 3–4 个不相关的词用符号连起来，例如「蓝色-酸奶-27-地铁」，好记，但不容易被字典猜中。</p>
+      </div>
+
+      <div class="dos-grid">
+        <article class="card list-card do reveal">
+          <div class="list-head"><span class="badge" aria-hidden="true">✓</span><h3>建议这样做</h3></div>
+          <ul>
+            <li>用<strong>四个不相关的词 + 符号</strong>组成长口令，只为自己保留联想。</li>
+            <li><strong>邮箱、支付、校园统一身份认证</strong>至少这三套密码互不相同。</li>
+            <li>重要账号开启双因素认证，能用验证器 App 或通行密钥就不用短信。</li>
+            <li>用密码管理器记密码，只需要记住一个足够强的主密码。</li>
+          </ul>
+        </article>
+
+        <article class="card list-card dont reveal">
+          <div class="list-head"><span class="badge" aria-hidden="true">✕</span><h3>尽量避免</h3></div>
+          <ul>
+            <li>不用<strong>学号、生日、手机号、姓名拼音、宿舍号</strong>组合成密码。</li>
+            <li>不在多个网站复用同一个密码，尤其是邮箱密码。</li>
+            <li>不把验证码告诉任何人——老师、客服、警察都不会向你要。</li>
+            <li>不在陌生链接、问卷、兼职报名页输入校园账号密码。</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 识别钓鱼 -->
+  <section class="section" id="phishing">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker"><span>02</span>识别钓鱼</p>
+          <h2>所有钓鱼消息，<br>都在催你快点决定</h2>
+        </div>
+        <p class="section-lead">
+          钓鱼攻击不靠技术多高明，靠的是让你<strong>来不及思考</strong>。冒充教务处、辅导员、快递、奖学金、兼职和二手交易，
+          都是校园里的高频剧本。
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <article class="card step reveal">
+          <div class="step-no">STEP 01</div>
+          <h3>停</h3>
+          <p>看到「立刻」「今天截止」「否则停用」，先把手机放下 3 分钟。所有紧迫感都是设计出来的。</p>
+        </article>
+        <article class="card step reveal">
+          <div class="step-no">STEP 02</div>
+          <h3>看</h3>
+          <p>看发件人完整地址、看链接真实域名、看是否索要验证码或转账。文字可以伪装，域名很难。</p>
+        </article>
+        <article class="card step reveal">
+          <div class="step-no">STEP 03</div>
+          <h3>验</h3>
+          <p>通过学校官网、官方 App、通讯录里的电话或当面向本人核实。绝不用消息里给的联系方式。</p>
+        </article>
+      </div>
+
+      <div class="card phish-lab reveal">
+        <div>
+          <p class="lab-title">一条典型钓鱼短信，藏着 5 个破绽</p>
+          <p class="lab-sub">点击红色编号，查看对应的破绽。</p>
+
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="phone-status"><span>9:41</span><span class="dots">● ● ●</span></div>
+              <div class="phone-contact">
+                <span class="phone-avatar" aria-hidden="true">106</span>
+                <div><strong>1069****</strong><small>短信 · 可被伪冒</small></div>
+              </div>
+              <div class="msg-bubble">
+                【教务处】同学你好<button class="flag" type="button" data-flag="5" aria-label="查看破绽 5：泛化称呼">5</button>，你的学籍信息异常，请在今日 22:00 前<button class="flag" type="button" data-flag="1" aria-label="查看破绽 1：制造紧迫感">1</button> 登录 <mark>http://jwxt-verify.top</mark><button class="flag" type="button" data-flag="2" aria-label="查看破绽 2：可疑域名">2</button> 完成认证<button class="flag" type="button" data-flag="3" aria-label="查看破绽 3：索要认证">3</button>，否则将影响毕业。如有疑问请联系 QQ 9988****<button class="flag" type="button" data-flag="4" aria-label="查看破绽 4：转到私人社交">4</button>。
+              </div>
+              <p class="phone-time">今天 21:07</p>
+            </div>
+          </div>
+        </div>
+
+        <ul class="legend" aria-label="钓鱼短信破绽说明">
+          <li>
+            <button class="legend-row" type="button" data-flag="1">
+              <span class="num">1</span>
+              <span class="legend-text"><strong>制造紧迫感</strong><span class="legend-desc">“今日 22:00 前”“影响毕业”，用时间和严重后果逼你跳过核实。</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="legend-row" type="button" data-flag="2">
+              <span class="num">2</span>
+              <span class="legend-text"><strong>可疑域名</strong><span class="legend-desc">jwxt-verify.top 和学校没有任何关系。正规教务系统一般使用学校官方域名。</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="legend-row" type="button" data-flag="3">
+              <span class="num">3</span>
+              <span class="legend-text"><strong>索要“认证”</strong><span class="legend-desc">链接跳转的往往是仿冒登录页，用来偷走你的学号和密码。</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="legend-row" type="button" data-flag="4">
+              <span class="num">4</span>
+              <span class="legend-text"><strong>转到私人社交</strong><span class="legend-desc">让你加 QQ 私聊，绕开官方渠道，方便后续以“保证金”等名义继续骗钱。</span></span>
+            </button>
+          </li>
+          <li>
+            <button class="legend-row" type="button" data-flag="5">
+              <span class="num">5</span>
+              <span class="legend-text"><strong>泛化称呼</strong><span class="legend-desc">没有姓名、学号，“同学你好”是群发模板的典型特征。</span></span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card quiz-wrap reveal" id="quiz">
+        <div class="quiz-head">
+          <h3>轮到你判断：4 条消息，你能识破几个？</h3>
+          <div class="quiz-score">答对 <strong id="quiz-correct">0</strong> / 4</div>
+        </div>
+
+        <div class="quiz-list" id="quiz-list">
+          <article class="quiz-card" data-answer="phish" data-explain="正规奖助学金不会索要短信验证码，也不会用“今天截止”逼你私下提交银行卡信息。遇到钱款事项，应向辅导员当面或通过学校官方电话核实。">
+            <div class="quiz-meta"><span class="quiz-source">微信 · 备注「辅导员 王老师」</span><span class="quiz-index">01</span></div>
+            <p class="quiz-msg">学校有一笔助学金要补发，你把银行卡号和刚收到的短信验证码发我，我先帮你登记，名额今天下午就截止。</p>
+            <div class="quiz-actions">
+              <button class="choice" type="button" data-choice="safe">可信</button>
+              <button class="choice" type="button" data-choice="phish">可疑</button>
+            </div>
+            <div class="quiz-feedback" hidden></div>
+          </article>
+
+          <article class="quiz-card" data-answer="safe" data-explain="域名属于学校 edu.cn 官方域，且使用 HTTPS 加密。相对可信，但仍要养成从收藏夹或学校官网进入的习惯，不要在陌生链接里输入统一身份认证密码。">
+            <div class="quiz-meta"><span class="quiz-source">浏览器 · 地址栏 https://vpn.school.edu.cn</span><span class="quiz-index">02</span></div>
+            <p class="quiz-msg">请使用学号与统一身份认证密码登录校园 VPN，首次登录需完成手机号绑定。</p>
+            <div class="quiz-actions">
+              <button class="choice" type="button" data-choice="safe">可信</button>
+              <button class="choice" type="button" data-choice="phish">可疑</button>
+            </div>
+            <div class="quiz-feedback" hidden></div>
+          </article>
+
+          <article class="quiz-card" data-answer="phish" data-explain="“24 小时内处理”是典型的话术，kuaidi-campus.top 也不是快递公司的官方域名。查物流请直接打开快递官方 App，或从官网输入单号。">
+            <div class="quiz-meta"><span class="quiz-source">短信 · 1069****</span><span class="quiz-index">03</span></div>
+            <p class="quiz-msg">【校园快递】您的包裹地址异常，请于 24 小时内点击 http://kuaidi-campus.top 重新填写，逾期将自动退回。</p>
+            <div class="quiz-actions">
+              <button class="choice" type="button" data-choice="safe">可信</button>
+              <button class="choice" type="button" data-choice="phish">可疑</button>
+            </div>
+            <div class="quiz-feedback" hidden></div>
+          </article>
+
+          <article class="quiz-card" data-answer="phish" data-explain="脱离平台私下转账没有任何担保，票根照片也不能证明票是真的。二手交易尽量走平台担保支付，不提前交定金，不点陌生付款链接。">
+            <div class="quiz-meta"><span class="quiz-source">二手交易群 · 私聊</span><span class="quiz-index">04</span></div>
+            <p class="quiz-msg">演唱会票我多一张，平台抽成太高，你直接微信转我 300 定金，我把票根拍照发你，绝对靠谱。</p>
+            <div class="quiz-actions">
+              <button class="choice" type="button" data-choice="safe">可信</button>
+              <button class="choice" type="button" data-choice="phish">可疑</button>
+            </div>
+            <div class="quiz-feedback" hidden></div>
+          </article>
+        </div>
+
+        <div class="quiz-footer">
+          <p id="quiz-verdict">完成 4 道题，看看你能不能全部识破。</p>
+          <button class="link-btn" type="button" id="quiz-reset">重新作答</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 个人信息保护 -->
+  <section class="section" id="privacy">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker"><span>03</span>个人信息保护</p>
+          <h2>你晒出的每一条，<br>都在帮别人拼出你</h2>
+        </div>
+        <p class="section-lead">
+          个人信息不只是身份证号。课表、宿舍、行程、快递单，甚至一张宿舍自拍，
+          拼起来就能描出你的生活轨迹。原则只有四个字：<strong>最少提供</strong>。
+        </p>
+      </div>
+
+      <div class="data-grid">
+        <article class="card data-card high reveal">
+          <div class="data-level"><i aria-hidden="true"></i>高敏感 · 泄露即高危</div>
+          <h3>绝不轻易给出</h3>
+          <p>这些信息一旦被拿到，账号和钱都可能直接失守。</p>
+          <div class="tags">
+            <span>短信验证码</span><span>支付密码</span><span>身份证正反面</span><span>银行卡号 / CVV</span><span>人脸与指纹</span>
+          </div>
+        </article>
+
+        <article class="card data-card mid reveal">
+          <div class="data-level"><i aria-hidden="true"></i>较敏感 · 需要时再给</div>
+          <h3>能少给就少给</h3>
+          <p>单独看问题不大，组合起来足以精准冒充你或定位你。</p>
+          <div class="tags">
+            <span>学号</span><span>宿舍楼栋</span><span>实时位置</span><span>课表与作息</span><span>车票 / 机票二维码</span>
+          </div>
+        </article>
+
+        <article class="card data-card low reveal">
+          <div class="data-level"><i aria-hidden="true"></i>可公开 · 也要有边界</div>
+          <h3>分享前想一秒</h3>
+          <p>公开内容也可能被拼接利用，发布前确认没有暴露他人信息。</p>
+          <div class="tags">
+            <span>社团与兴趣</span><span>公开作品</span><span>活动合影</span><span>校园日常</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="habit-grid">
+        <article class="card habit reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 15l-4.5-4.5L7 20"/></svg>
+          </div>
+          <div>
+            <h3>晒图之前先“三遮”</h3>
+            <p>遮住证件、票据二维码、门牌与宿舍号；快递单丢掉前涂掉<strong>姓名、电话和地址</strong>。合影先问一句再发。</p>
+          </div>
+        </article>
+
+        <article class="card habit reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+          </div>
+          <div>
+            <h3>权限按需给</h3>
+            <p>定位选“仅使用期间”，通讯录、相册、麦克风非必要不授权。每学期去系统设置里<strong>复查一次</strong>。</p>
+          </div>
+        </article>
+
+        <article class="card habit reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a16 16 0 0 1 20 0"/><path d="M5 12.4a11 11 0 0 1 14 0"/><path d="M8.5 16a6 6 0 0 1 7 0"/><path d="M12 20h.01"/></svg>
+          </div>
+          <div>
+            <h3>公共 WiFi 不办“正事”</h3>
+            <p>不登录网银、不输支付密码。必须处理时<strong>切手机流量</strong>，并关闭“自动连接开放网络”。</p>
+          </div>
+        </article>
+
+        <article class="card habit reveal">
+          <div class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="10" r="2"/><path d="M14 9h4"/><path d="M14 13h4"/><path d="M5.5 17c.8-1.7 1.8-2.5 3-2.5s2.2.8 3 2.5"/></svg>
+          </div>
+          <div>
+            <h3>身份证照片加水印</h3>
+            <p>写上“仅用于 ×× 用途，他用无效”，覆盖在证件上但不遮挡关键信息。不要发送<strong>未处理的正面原图</strong>。</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="card check-card reveal">
+        <div class="check-head">
+          <div>
+            <h3>隐私体检 · 7 个小习惯</h3>
+            <p>勾选你已做到的项目。进度只保存在本机浏览器，不会上传。</p>
+          </div>
+          <div class="check-count"><strong id="check-num">0</strong> / 7</div>
+        </div>
+
+        <div class="check-progress" aria-hidden="true"><span id="check-fill"></span></div>
+
+        <ul class="check-list">
+          <li class="check-item"><label><input type="checkbox"><span>社交账号没有公开手机号、学号和宿舍号。</span></label></li>
+          <li class="check-item"><label><input type="checkbox"><span>我已关闭不必要的“始终允许”定位与相册权限。</span></label></li>
+          <li class="check-item"><label><input type="checkbox"><span>丢弃快递单前，我会涂掉姓名、电话和地址。</span></label></li>
+          <li class="check-item"><label><input type="checkbox"><span>我不会把身份证原图发给不认识的人或陌生平台。</span></label></li>
+          <li class="check-item"><label><input type="checkbox"><span>重要账号使用不同密码，并开启了双因素认证。</span></label></li>
+          <li class="check-item"><label><input type="checkbox"><span>公共 WiFi 下，我不登录网银或输入支付密码。</span></label></li>
+          <li class="check-item"><label><input type="checkbox"><span>我知道被骗后先做什么，也存了学校保卫处电话。</span></label></li>
+        </ul>
+
+        <div class="check-foot">
+          <p id="check-msg" aria-live="polite">从一项开始，今天就能完成。</p>
+          <button class="link-btn" type="button" id="check-reset">清空重来</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 应急指南 -->
+  <section class="section" id="response">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker"><span>04</span>应急指南</p>
+          <h2>万一已经中招，<br>按顺序做这四步</h2>
+        </div>
+        <p class="section-lead">
+          已经点了链接、转了钱、泄露了验证码？<strong>别慌，也别觉得丢人。</strong>
+          越早处理，损失越可控。把下面的顺序存进备忘录。
+        </p>
+      </div>
+
+      <div class="timeline">
+        <article class="card em-step reveal">
+          <div class="em-top"><span class="em-num">1</span><span class="em-time">0–10 分钟</span></div>
+          <h3>立即止损</h3>
+          <p>断开网络、退出可疑页面；银行卡被盗刷立即联系银行冻结；微信、支付宝可在安全中心紧急冻结。</p>
+        </article>
+
+        <article class="card em-step reveal">
+          <div class="em-top"><span class="em-num">2</span><span class="em-time">10–30 分钟</span></div>
+          <h3>改密、踢设备</h3>
+          <p>改掉使用同一密码的所有账号，优先邮箱和支付；开启双因素认证；在“登录设备管理”里退出陌生设备。</p>
+        </article>
+
+        <article class="card em-step reveal">
+          <div class="em-top"><span class="em-num">3</span><span class="em-time">当天</span></div>
+          <h3>留证、上报</h3>
+          <p>截图聊天、转账和链接页面；联系辅导员与学校保卫处；拨打 110 报警，涉诈可拨 96110 咨询。</p>
+        </article>
+
+        <article class="card em-step reveal">
+          <div class="em-top"><span class="em-num">4</span><span class="em-time">之后</span></div>
+          <h3>持续观察</h3>
+          <p>查账单和征信；提醒家人朋友防止冒充；警惕二次诈骗，别信“帮你追回损失”的人。</p>
+        </article>
+      </div>
+
+      <div class="hotline reveal">
+        <div class="hotline-copy">
+          <h3>记住这三个号码</h3>
+          <p>96110 是全国反诈预警劝阻专线。接到 96110 来电，说明你可能正在遭遇诈骗，请及时接听。</p>
+          <div class="never-row">
+            <span>不给验证码</span>
+            <span>不私下转账</span>
+            <span>不删除聊天记录</span>
+          </div>
+        </div>
+        <div class="hotline-numbers">
+          <div class="hotline-item"><strong>110</strong><small>报警</small></div>
+          <div class="hotline-item"><strong>96110</strong><small>反诈专线</small></div>
+          <div class="hotline-item"><strong>保卫处</strong><small>存进通讯录</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing">
+    <div class="container">
+      <div class="closing-card reveal">
+        <p class="kicker">写在最后</p>
+        <h2>安全不是一次设置，<br>而是一种习惯。</h2>
+        <p>
+          你不需要成为安全专家。只要在每次点击前多停三秒，在每次输入前多问一句，
+          在每次晒图前多看一眼，就已经躲开了大多数陷阱。
+        </p>
+        <div class="closing-actions">
+          <a class="btn btn-primary" href="#passwords">再看一遍重点</a>
+          <a class="btn btn-ghost" href="#quiz">重做钓鱼自测</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-brand">大学生网络安全常识 · 公益科普</p>
+      <p class="footer-note">
+        本页不收集任何信息。密码强度在本机浏览器计算，不会上传；体检进度仅保存在本机。
+        内容供教学参考，具体业务请以学校官方通知为准。
+      </p>
+    </div>
+    <span class="footer-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-2.9 8.4-7 9.7C7.9 19.4 5 15.4 5 11V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
+      多一点警惕，少一次后悔
+    </span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- scroll progress ---------- */
+  var progress = document.getElementById('scroll-progress');
+  function updateProgress() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - doc.clientHeight;
+    var value = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+    progress.style.width = value.toFixed(2) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+
+  /* ---------- navigation active state ---------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var sections = navLinks.map(function (link) {
+    return document.querySelector(link.getAttribute('href'));
+  }).filter(Boolean);
+
+  if ('IntersectionObserver' in window && sections.length) {
+    var navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(function (link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      });
+    }, { rootMargin: '-40% 0px -52% 0px', threshold: 0 });
+    sections.forEach(function (section) { navObserver.observe(section); });
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- password strength ---------- */
+  var pwInput = document.getElementById('pw-input');
+  var pwToggle = document.getElementById('pw-toggle');
+  var meterFill = document.getElementById('meter-fill');
+  var meter = document.getElementById('pw-meter');
+  var levelEl = document.getElementById('pw-level');
+  var scoreEl = document.getElementById('pw-score');
+  var adviceEl = document.getElementById('pw-advice');
+  var ruleEls = Array.prototype.slice.call(document.querySelectorAll('.rule'));
+
+  var commonWords = [
+    '123456', 'password', 'qwerty', 'abc123', '111111', '000000',
+    'admin', 'iloveyou', 'woaini', '5201314', 'a123456', '888888',
+    '666666', 'letmein', 'welcome', 'monkey', 'dragon'
+  ];
+
+  var levels = [
+    { max: 24, name: '很弱', color: '#d94a36' },
+    { max: 44, name: '偏弱', color: '#df7a32' },
+    { max: 64, name: '一般', color: '#d3a11f' },
+    { max: 84, name: '较强', color: '#3f9e6a' },
+    { max: 101, name: '很强', color: '#0e9f8a' }
+  ];
+
+  var defaultAdvice = '好口令的一个思路：把 3–4 个不相关的词用符号连起来，例如「蓝色-酸奶-27-地铁」，好记，但不容易被字典猜中。';
+
+  function evaluatePassword(value) {
+    var chars = Array.from(value);
+    var len = chars.length;
+    var lower = /[a-z]/.test(value);
+    var upper = /[A-Z]/.test(value);
+    var digit = /[0-9]/.test(value);
+    var symbol = /[^A-Za-z0-9\s]/.test(value);
+    var classes = [lower, upper, digit, symbol].filter(Boolean).length;
+    var lowerValue = value.toLowerCase();
+
+    var hasCommon = commonWords.some(function (word) {
+      return lowerValue.indexOf(word) !== -1;
+    });
+    var hasSequence = /(012|123|234|345|456|567|678|789|abc|bcd|cde|qwe|wer|ert|asd|sdf|zxc)/i.test(value);
+    var hasRepeat = /(.)\1{2,}/.test(value);
+    var hasYear = /(19|20)\d{2}/.test(value);
+    var uniqueRatio = len > 0 ? new Set(chars).size / len : 0;
+
+    var score = Math.min(42, len * 3.2) + classes * 8;
+    if (len >= 12) score += 8;
+    if (len >= 16) score += 10;
+    if (len > 0 && uniqueRatio >= 0.7) score += 8;
+    if (hasCommon) score -= 42;
+    if (hasSequence) score -= 12;
+    if (hasRepeat) score -= 10;
+    if (hasYear) score -= 8;
+    score = Math.max(0, Math.min(100, Math.round(score)));
+
+    return {
+      score: score,
+      len: len,
+      classes: classes,
+      hasCommon: hasCommon,
+      hasSequence: hasSequence,
+      hasRepeat: hasRepeat,
+      uniqueRatio: uniqueRatio
+    };
+  }
+
+  function levelFor(score) {
+    for (var i = 0; i < levels.length; i++) {
+      if (score <= levels[i].max) return levels[i];
+    }
+    return levels[levels.length - 1];
+  }
+
+  function updatePassword() {
+    var value = pwInput.value;
+    var result = evaluatePassword(value);
+    var empty = value.length === 0;
+    var level = levelFor(result.score);
+
+    meterFill.style.width = empty ? '0%' : Math.max(3, result.score) + '%';
+    meterFill.style.background = empty ? '#cbd5e1' : level.color;
+    levelEl.textContent = empty ? '等待输入' : level.name;
+    levelEl.style.color = empty ? '' : level.color;
+    scoreEl.textContent = (empty ? 0 : result.score) + ' / 100';
+    meter.setAttribute('aria-valuenow', String(empty ? 0 : result.score));
+
+    var state = {
+      length: result.len >= 12,
+      mix: /[a-z]/.test(value) && /[A-Z]/.test(value),
+      digit: /[0-9]/.test(value),
+      symbol: /[^A-Za-z0-9\s]/.test(value),
+      uncommon: !empty && !result.hasCommon && !result.hasSequence
+    };
+
+    ruleEls.forEach(function (el) {
+      el.classList.toggle('met', Boolean(state[el.getAttribute('data-rule')]));
+    });
+
+    adviceEl.removeAttribute('data-tone');
+
+    if (empty) {
+      adviceEl.textContent = defaultAdvice;
+      return;
+    }
+
+    if (value.length < 6) {
+      adviceEl.textContent = '太短了。6 位以内的口令很容易被穷举，建议至少 12 位，并混入不同类型的字符。';
+      adviceEl.setAttribute('data-tone', 'warn');
+      return;
+    }
+
+    if (result.hasCommon) {
+      adviceEl.textContent = '这个口令包含常见词、年份或键盘序列，攻击者的字典里第一批就会试它。换一个与个人信息无关的长口令。';
+      adviceEl.setAttribute('data-tone', 'warn');
+      return;
+    }
+
+    if (result.hasRepeat) {
+      adviceEl.textContent = '连续重复的字符会明显降低猜测难度。试试把重复部分换成不相关的词，并增加到 12 位以上。';
+      adviceEl.setAttribute('data-tone', 'warn');
+      return;
+    }
+
+    if (result.len < 12) {
+      adviceEl.textContent = '长度还不够。把 3–4 个不相关的词用符号连起来，凑到 12 位以上，比单纯增加符号更有效。';
+      adviceEl.setAttribute('data-tone', 'warn');
+      return;
+    }
+
+    if (result.classes < 3) {
+      adviceEl.textContent = '长度不错，再混入大写字母、数字或符号，能进一步增加猜测难度。也别忘了：这个口令不要用在其他网站。';
+      return;
+    }
+
+    if (result.score >= 85) {
+      adviceEl.textContent = '强度不错，这是一条难猜的口令。请确认它没有在其他网站使用过，并为邮箱、支付等重要账号开启双因素认证。';
+      adviceEl.setAttribute('data-tone', 'good');
+      return;
+    }
+
+    adviceEl.textContent = '已经达到可用水平。如果还能再加长两三位，并避免与个人信息相关，会更稳妥。';
+  }
+
+  pwInput.addEventListener('input', updatePassword);
+  pwToggle.addEventListener('click', function () {
+    var showing = pwInput.type === 'text';
+    pwInput.type = showing ? 'password' : 'text';
+    pwToggle.textContent = showing ? '显示' : '隐藏';
+    pwToggle.setAttribute('aria-pressed', String(!showing));
+    pwToggle.setAttribute('aria-label', showing ? '显示密码' : '隐藏密码');
+    pwInput.focus();
+  });
+
+  /* ---------- phishing flags ---------- */
+  var legendRows = Array.prototype.slice.call(document.querySelectorAll('.legend-row'));
+  var flagButtons = Array.prototype.slice.call(document.querySelectorAll('.flag'));
+
+  function focusFlag(number) {
+    legendRows.forEach(function (row) {
+      var active = row.getAttribute('data-flag') === number;
+      row.classList.toggle('is-active', active);
+      row.setAttribute('aria-pressed', String(active));
+    });
+    flagButtons.forEach(function (btn) {
+      if (btn.getAttribute('data-flag') === number) {
+        btn.classList.remove('is-pulse');
+        void btn.offsetWidth;
+        btn.classList.add('is-pulse');
+      }
+    });
+  }
+
+  legendRows.forEach(function (row) {
+    row.setAttribute('aria-pressed', 'false');
+    row.addEventListener('click', function () {
+      focusFlag(row.getAttribute('data-flag'));
+    });
+  });
+  flagButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      focusFlag(btn.getAttribute('data-flag'));
+    });
+  });
+
+  /* ---------- quiz ---------- */
+  var quizCards = Array.prototype.slice.call(document.querySelectorAll('.quiz-card'));
+  var quizCorrectEl = document.getElementById('quiz-correct');
+  var quizVerdict = document.getElementById('quiz-verdict');
+  var quizReset = document.getElementById('quiz-reset');
+  var correctCount = 0;
+
+  function updateVerdict() {
+    var done = quizCards.filter(function (card) {
+      return card.getAttribute('data-answered') === '1';
+    }).length;
+
+    if (done === 0) {
+      quizVerdict.textContent = '完成 4 道题，看看你能不能全部识破。';
+    } else if (done < quizCards.length) {
+      quizVerdict.textContent = '已完成 ' + done + ' / ' + quizCards.length + ' 题，继续判断。';
+    } else if (correctCount === quizCards.length) {
+      quizVerdict.textContent = '全部答对。把这 4 个套路记住，也提醒一下室友。';
+    } else if (correctCount >= 2) {
+      quizVerdict.textContent = '答对 ' + correctCount + ' 题。再回看一下判断错的那条，破绽通常就在“急”和“私”两个字上。';
+    } else {
+      quizVerdict.textContent = '答对 ' + correctCount + ' 题。别灰心，回到上面的 5 个破绽再看一遍，会清晰很多。';
+    }
+  }
+
+  quizCards.forEach(function (card) {
+    var choices = Array.prototype.slice.call(card.querySelectorAll('.choice'));
+    choices.forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (card.getAttribute('data-answered') === '1') return;
+        card.setAttribute('data-answered', '1');
+
+        var answer = card.getAttribute('data-answer');
+        var chosen = button.getAttribute('data-choice');
+        var isCorrect = chosen === answer;
+
+        choices.forEach(function (btn) {
+          btn.disabled = true;
+          if (btn.getAttribute('data-choice') === answer) {
+            btn.classList.add('is-correct');
+          }
+        });
+        if (!isCorrect) button.classList.add('is-wrong');
+
+        var feedback = card.querySelector('.quiz-feedback');
+        feedback.hidden = false;
+        feedback.setAttribute('data-state', isCorrect ? 'ok' : 'bad');
+        feedback.innerHTML = '<strong>' + (isCorrect ? '判断正确。' : '再看一眼。') + '</strong>' + card.getAttribute('data-explain');
+
+        if (isCorrect) correctCount += 1;
+        quizCorrectEl.textContent = String(correctCount);
+        updateVerdict();
+      });
+    });
+  });
+
+  quizReset.addEventListener('click', function () {
+    correctCount = 0;
+    quizCorrectEl.textContent = '0';
+    quizCards.forEach(function (card) {
+      card.removeAttribute('data-answered');
+      var feedback = card.querySelector('.quiz-feedback');
+      feedback.hidden = true;
+      feedback.textContent = '';
+      feedback.removeAttribute('data-state');
+      Array.prototype.slice.call(card.querySelectorAll('.choice')).forEach(function (btn) {
+        btn.disabled = false;
+        btn.classList.remove('is-correct', 'is-wrong');
+      });
+    });
+    updateVerdict();
+    document.getElementById('quiz').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  });
+
+  /* ---------- privacy checklist ---------- */
+  var checkInputs = Array.prototype.slice.call(document.querySelectorAll('.check-item input'));
+  var checkNum = document.getElementById('check-num');
+  var checkFill = document.getElementById('check-fill');
+  var checkMsg = document.getElementById('check-msg');
+  var checkReset = document.getElementById('check-reset');
+  var storageKey = 'campus-cyber-checklist-v1';
+
+  function readChecklist() {
+    try {
+      var raw = window.localStorage.getItem(storageKey);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveChecklist() {
+    try {
+      var state = checkInputs.map(function (input) { return input.checked; });
+      window.localStorage.setItem(storageKey, JSON.stringify(state));
+    } catch (error) {
+      /* localStorage 不可用时，进度只在当前页面有效 */
+    }
+  }
+
+  function updateChecklist() {
+    var count = checkInputs.filter(function (input) { return input.checked; }).length;
+    var total = checkInputs.length;
+    checkNum.textContent = String(count);
+    checkFill.style.width = ((count / total) * 100).toFixed(1) + '%';
+
+    if (count === 0) {
+      checkMsg.textContent = '从一项开始，今天就能完成。';
+    } else if (count < 4) {
+      checkMsg.textContent = '已经点亮 ' + count + ' 项，继续保持。';
+    } else if (count < total) {
+      checkMsg.textContent = '完成 ' + count + ' / ' + total + '，就差一点了。';
+    } else {
+      checkMsg.textContent = '全部完成！记得每学期复查一次。';
+    }
+  }
+
+  var saved = readChecklist();
+  checkInputs.forEach(function (input, index) {
+    if (saved[index] === true) input.checked = true;
+    input.addEventListener('change', function () {
+      updateChecklist();
+      saveChecklist();
+    });
+  });
+  updateChecklist();
+
+  checkReset.addEventListener('click', function () {
+    checkInputs.forEach(function (input) { input.checked = false; });
+    updateChecklist();
+    saveChecklist();
+  });
+
+  /* ---------- initial state ---------- */
+  updatePassword();
+  updateVerdict();
+})();
+</script>
+</body>
+</html>

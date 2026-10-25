@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>旋转鸡块 · Rotating Nugget</title>
+<style>
+  :root{
+    --gold:#f6c667;
+    --gold-2:#ffdf9e;
+    --cream:#f7ead6;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(120% 85% at 50% 6%, #3b2616 0%, #1d1209 36%, #0a0706 68%, #050403 100%);
+    color:var(--cream);
+    font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- 背景层 ---------- */
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .stars i{
+    position:absolute;background:#fff;border-radius:50%;
+    animation:twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.15;transform:scale(.8)}
+    50%{opacity:.9;transform:scale(1.15)}
+  }
+  .glow{
+    position:fixed;left:50%;top:44%;width:120vmax;height:120vmax;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(255,161,54,.11) 0%, rgba(255,120,20,.05) 32%, transparent 62%);
+    pointer-events:none;z-index:0;
+  }
+  .vignette{
+    position:fixed;inset:0;z-index:3;pointer-events:none;
+    background:radial-gradient(120% 100% at 50% 48%, transparent 38%, rgba(0,0,0,.55) 100%);
+  }
+  .corner{
+    position:fixed;z-index:4;pointer-events:none;
+    font-size:9.5px;letter-spacing:.34em;text-transform:uppercase;
+    color:rgba(246,198,103,.3);
+  }
+  .corner.tl{top:22px;left:26px}
+  .corner.br{bottom:20px;right:26px}
+
+  /* ---------- 布局 ---------- */
+  .app{
+    position:relative;z-index:2;
+    width:100%;max-width:100vw;
+    min-height:100dvh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(2px,1.2vh,14px);
+    padding:clamp(14px,3vh,30px) 18px calc(env(safe-area-inset-bottom) + 10px);
+  }
+
+  .hero{text-align:center}
+  .eyebrow{
+    margin:0 0 8px;font-size:10px;letter-spacing:.42em;text-transform:uppercase;
+    color:rgba(246,198,103,.62);
+  }
+  h1{
+    margin:0;font-weight:900;letter-spacing:.16em;
+    font-size:clamp(26px,4.2vw,44px);line-height:1.1;
+    text-shadow:0 0 40px rgba(255,180,80,.16);
+  }
+  h1 span{
+    background:linear-gradient(180deg,#ffeec4 0%,#f4b854 52%,#c07c22 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 24px rgba(242,179,78,.35));
+  }
+
+  /* ---------- 舞台 ---------- */
+  .stage{
+    position:relative;
+    width:min(94vw,700px);
+    aspect-ratio:4/3;
+    perspective:1200px;
+    perspective-origin:50% 46%;
+    touch-action:none;
+    cursor:grab;
+    user-select:none;-webkit-user-select:none;
+  }
+  .stage.grabbing{cursor:grabbing}
+
+  .halo{
+    position:absolute;left:50%;top:48%;width:74%;aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:conic-gradient(from 0deg,
+      transparent 0deg, rgba(255,190,90,.28) 55deg, transparent 130deg,
+      rgba(255,120,40,.18) 210deg, transparent 290deg, rgba(255,210,140,.2) 340deg, transparent 360deg);
+    filter:blur(26px);
+    animation:haloSpin 16s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes haloSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+  .shadow{
+    position:absolute;left:50%;bottom:10%;width:42%;height:8%;
+    transform:translateX(-50%);
+    background:radial-gradient(ellipse at center, rgba(255,158,58,.42), rgba(255,110,20,.10) 58%, transparent 74%);
+    filter:blur(12px);
+    animation:shadowPulse 6.5s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes shadowPulse{
+    0%,100%{transform:translateX(-50%) scale(1);opacity:.85}
+    50%{transform:translateX(-50%) scale(.82);opacity:.55}
+  }
+
+  .nugget{
+    position:absolute;inset:0;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .slice{
+    position:absolute;inset:0;
+    transform-style:preserve-3d;
+    pointer-events:none;
+  }
+  .slice svg{display:block;width:100%;height:100%;overflow:visible}
+
+  .pop{
+    position:absolute;z-index:9;
+    transform:translate(-50%,-50%);
+    font-weight:900;font-size:15px;letter-spacing:.08em;
+    color:#ffd489;white-space:nowrap;pointer-events:none;
+    text-shadow:0 0 16px rgba(255,170,60,.9), 0 2px 10px rgba(0,0,0,.6);
+    animation:popUp 1.05s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  @keyframes popUp{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(var(--r,0deg))}
+    22%{opacity:1}
+    100%{opacity:0;transform:translate(-50%,-190%) scale(1.18) rotate(var(--r,0deg))}
+  }
+
+  /* ---------- 控制台 ---------- */
+  .panel{
+    display:flex;align-items:center;gap:clamp(10px,1.6vw,18px);
+    flex-wrap:wrap;justify-content:center;
+    max-width:100%;
+    padding:12px clamp(14px,2vw,24px);
+    border-radius:20px;
+    background:linear-gradient(180deg, rgba(255,236,206,.075), rgba(255,236,206,.028));
+    border:1px solid rgba(246,198,103,.16);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 22px 55px -24px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.07);
+  }
+  .stat{display:flex;flex-direction:column;line-height:1.15;min-width:58px;text-align:center}
+  .stat b{
+    font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;
+    color:var(--gold-2);text-shadow:0 0 18px rgba(246,198,103,.45);
+  }
+  .stat small{margin-top:4px;font-size:9px;letter-spacing:.2em;color:rgba(247,234,214,.5)}
+  .sep{width:1px;height:30px;background:linear-gradient(180deg,transparent,rgba(246,198,103,.22),transparent)}
+
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:clamp(96px,17vw,168px);height:4px;border-radius:99px;
+    background:rgba(246,198,103,.22);
+    outline:none;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #fff5da, #eab049 58%, #b97a26);
+    border:1px solid rgba(255,244,216,.85);
+    box-shadow:0 0 14px rgba(246,198,103,.85);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:15px;height:15px;border:1px solid rgba(255,244,216,.85);border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #fff5da, #eab049 58%, #b97a26);
+    box-shadow:0 0 14px rgba(246,198,103,.85);
+  }
+
+  .btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  button{
+    font:inherit;font-size:12.5px;letter-spacing:.06em;
+    color:#ffe2b0;
+    background:rgba(246,198,103,.09);
+    border:1px solid rgba(246,198,103,.22);
+    padding:8px 14px;border-radius:11px;cursor:pointer;
+    transition:background .18s ease,transform .18s ease,border-color .18s ease,color .18s ease;
+  }
+  button:hover{background:rgba(246,198,103,.19);border-color:rgba(246,198,103,.48);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.968)}
+  button.on{background:rgba(246,198,103,.26);border-color:rgba(246,198,103,.62);color:#fff6e0}
+
+  footer{
+    font-size:10.5px;letter-spacing:.13em;color:rgba(247,234,214,.4);
+    text-align:center;line-height:1.95;
+  }
+  kbd{
+    font:inherit;font-size:10px;padding:1px 5px;border-radius:4px;
+    border:1px solid rgba(246,198,103,.28);color:rgba(246,198,103,.75);
+  }
+
+  @media (max-height:740px){
+    h1{font-size:clamp(22px,3.6vw,32px)}
+    .stage{width:min(82vw,560px)}
+    .eyebrow{display:none}
+  }
+  @media (max-width:620px){
+    .sep{display:none}
+    .panel{
+      display:grid;
+      grid-template-columns:auto auto 1fr;
+      justify-items:center;align-items:center;
+      gap:10px 12px;
+      width:calc(100vw - 32px);
+      max-width:100%;
+      padding:11px 13px;border-radius:18px;
+    }
+    .btns{grid-column:1 / -1}
+    .stat{min-width:0}
+    .stat b{font-size:16px}
+    .stat small{font-size:8px;letter-spacing:.12em}
+    input[type=range]{width:100%;max-width:150px}
+    button{padding:7px 12px;font-size:12px;border-radius:9px}
+    footer{font-size:9.5px;letter-spacing:.06em}
+    .corner{display:none}
+    .stage{width:min(88vw,700px)}
+  }
+</style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+  <div class="corner tl">Nugget · No.01</div>
+  <div class="corner br">Freshly rotated</div>
+
+  <main class="app">
+    <header class="hero">
+      <p class="eyebrow">Rotating Nugget · 永不冷却</p>
+      <h1>旋转<span>鸡块</span></h1>
+    </header>
+
+    <section class="stage" id="stage" aria-label="旋转鸡块舞台">
+      <div class="halo"></div>
+      <div class="shadow"></div>
+      <div class="nugget" id="nugget"></div>
+    </section>
+
+    <section class="panel">
+      <div class="stat"><b id="rev">0</b><small>圈 数</small></div>
+      <div class="sep"></div>
+      <div class="stat"><b id="spd">70</b><small>度 / 秒</small></div>
+      <div class="sep"></div>
+      <input id="speed" type="range" min="0" max="360" step="1" value="70" aria-label="旋转速度">
+      <div class="sep"></div>
+      <div class="btns">
+        <button id="flip">反向</button>
+        <button id="pause">暂停</button>
+        <button id="reroll">换一块</button>
+      </div>
+    </section>
+
+    <footer>
+      拖动可以把鸡块转起来 · 点击它会说话 · <kbd>空格</kbd> 暂停<br>
+      它不会变凉，也永远不会被吃掉
+    </footer>
+  </main>
+
+  <div class="vignette"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= 随机 & 曲线 ================= */
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  // 闭合 Catmull-Rom -> 三次贝塞尔：既平滑又保留细小的边缘起伏
+  function catmullRom(pts){
+    const n = pts.length;
+    let d = "M " + pts[0][0].toFixed(2) + " " + pts[0][1].toFixed(2);
+    for(let i = 0; i < n; i++){
+      const p0 = pts[(i - 1 + n) % n], p1 = pts[i];
+      const p2 = pts[(i + 1) % n],     p3 = pts[(i + 2) % n];
+      const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += " C " + c1x.toFixed(2) + " " + c1y.toFixed(2) + " " +
+                   c2x.toFixed(2) + " " + c2y.toFixed(2) + " " +
+                   p2[0].toFixed(2) + " " + p2[1].toFixed(2);
+    }
+    return d + " Z";
+  }
+
+  /* ================= 形状 ================= */
+  const CX = 200, CY = 150, BASE_R = 132;
+
+  function buildShape(seed){
+    const rnd = mulberry32(seed);
+    const p1 = rnd() * Math.PI * 2;
+    const p2 = rnd() * Math.PI * 2;
+    const p3 = rnd() * Math.PI * 2;
+    const k2 = 1.7 + rnd() * 0.9;
+    const k3 = 3.4 + rnd() * 1.8;
+    const N = 46, pts = [];
+    for(let i = 0; i < N; i++){
+      const a = (i / N) * Math.PI * 2;
+      // 低频大鼓包 + 中频起伏 + 高频细碎抖动
+      const r = 1
+        + 0.115 * Math.sin(a * 2 + p1)
+        + 0.075 * Math.sin(a * k3 + p2)
+        + 0.022 * Math.sin(a * 9 + p3)
+        + (rnd() - 0.5) * 0.022;
+      pts.push([
+        CX + Math.cos(a) * BASE_R * r * 1.16,
+        CY + Math.sin(a) * BASE_R * r * 0.76
+      ]);
+    }
+    return catmullRom(pts);
+  }
+
+  function buildSpecks(seed){
+    const r = mulberry32(seed + 9173);
+    let s = "";
+
+    // 表面凸起（亮顶 + 暗底，制造凹凸感）
+    for(let i = 0; i < 9; i++){
+      const x = 66 + r() * 268;
+      const y = 46 + r() * 190;
+      const rad = 8 + r() * 18;
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) +
+           '" r="' + rad.toFixed(1) + '" fill="url(#ngBump)" opacity="' +
+           (0.18 + r() * 0.22).toFixed(2) + '"/>';
+    }
+
+    // 焦褐色深斑（炸得久一点的地方）
+    for(let i = 0; i < 34; i++){
+      const x = 56 + r() * 288;
+      const y = 42 + r() * 208;
+      const rx = 5 + r() * 16;
+      const ry = rx * (0.35 + r() * 0.75);
+      s += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) +
+           '" rx="' + rx.toFixed(1) + '" ry="' + ry.toFixed(1) +
+           '" fill="#7a4408" opacity="' + (0.05 + r() * 0.10).toFixed(3) +
+           '" transform="rotate(' + (r() * 180).toFixed(1) + " " + x.toFixed(1) + " " + y.toFixed(1) + ')"/>';
+    }
+
+    // 少量明显的面包糠亮点
+    for(let i = 0; i < 54; i++){
+      const x = 44 + r() * 312;
+      const y = 30 + r() * 240;
+      const rx = 0.9 + r() * 2;
+      const ry = rx * (0.5 + r() * 0.9);
+      s += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) +
+           '" rx="' + rx.toFixed(2) + '" ry="' + ry.toFixed(2) +
+           '" fill="' + (r() > 0.5 ? "#fff8e6" : "#603304") +
+           '" opacity="' + (0.12 + r() * 0.26).toFixed(2) +
+           '" transform="rotate(' + (r() * 180).toFixed(1) + " " + x.toFixed(1) + " " + y.toFixed(1) + ')"/>';
+    }
+
+    // 左上柔光
+    for(let i = 0; i < 3; i++){
+      const x = 90 + r() * 170;
+      const y = 48 + r() * 80;
+      const rx = 30 + r() * 38;
+      const ry = rx * (0.4 + r() * 0.4);
+      s += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) +
+           '" rx="' + rx.toFixed(1) + '" ry="' + ry.toFixed(1) +
+           '" fill="#fff8e4" opacity="' + (0.05 + r() * 0.08).toFixed(3) +
+           '" filter="url(#ngBlur)"/>';
+    }
+    return s;
+  }
+
+  function topSVG(d, specks){
+    return '<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">' +
+      '<defs>' +
+        '<clipPath id="ngClip"><path d="' + d + '"/></clipPath>' +
+        '<filter id="ngBlur" x="-40%" y="-40%" width="180%" height="180%">' +
+          '<feGaussianBlur stdDeviation="8"/></filter>' +
+        // 酥脆颗粒：暗屑 / 亮糠两层 alpha 噪声，不依赖混合模式
+        '<filter id="ngGrainD" x="0" y="0" width="100%" height="100%">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="0.92" numOctaves="3" seed="7"/>' +
+          '<feColorMatrix type="matrix" values="0 0 0 0 0.30  0 0 0 0 0.16  0 0 0 0 0.02  0 0 0 -1.15 0.54"/>' +
+        '</filter>' +
+        '<filter id="ngGrainL" x="0" y="0" width="100%" height="100%">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="0.92" numOctaves="3" seed="23"/>' +
+          '<feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 0.96  0 0 0 0 0.86  0 0 0 -1.15 0.48"/>' +
+        '</filter>' +
+        '<linearGradient id="ngBase" x1="14%" y1="0%" x2="78%" y2="100%">' +
+          '<stop offset="0%" stop-color="#f6c778"/>' +
+          '<stop offset="24%" stop-color="#e2a445"/>' +
+          '<stop offset="54%" stop-color="#c8863a"/>' +
+          '<stop offset="80%" stop-color="#a06826"/>' +
+          '<stop offset="100%" stop-color="#7c4d16"/>' +
+        '</linearGradient>' +
+        '<radialGradient id="ngBump" cx="35%" cy="28%" r="66%">' +
+          '<stop offset="0%" stop-color="#fff0c8" stop-opacity="0.4"/>' +
+          '<stop offset="46%" stop-color="#efaf54" stop-opacity="0.08"/>' +
+          '<stop offset="100%" stop-color="#6f400a" stop-opacity="0.34"/>' +
+        '</radialGradient>' +
+        '<radialGradient id="ngSheen" cx="33%" cy="18%" r="62%">' +
+          '<stop offset="0%" stop-color="#fffaea" stop-opacity="0.38"/>' +
+          '<stop offset="42%" stop-color="#ffe7b8" stop-opacity="0.07"/>' +
+          '<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>' +
+        '</radialGradient>' +
+        '<radialGradient id="ngWarm" cx="78%" cy="90%" r="64%">' +
+          '<stop offset="0%" stop-color="#6d3a06" stop-opacity="0.62"/>' +
+          '<stop offset="100%" stop-color="#6d3a06" stop-opacity="0"/>' +
+        '</radialGradient>' +
+        '<linearGradient id="ngRim" x1="8%" y1="0%" x2="88%" y2="100%">' +
+          '<stop offset="0%" stop-color="#ffeec2" stop-opacity="0.6"/>' +
+          '<stop offset="42%" stop-color="#ffdda0" stop-opacity="0.1"/>' +
+          '<stop offset="100%" stop-color="#d99b4a" stop-opacity="0.28"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+
+      '<path d="' + d + '" fill="url(#ngBase)" stroke="#7d4b12" stroke-width="2.2" ' +
+        'stroke-opacity="0.55" stroke-linejoin="round"/>' +
+
+      '<g clip-path="url(#ngClip)">' +
+        specks +
+        '<rect x="0" y="0" width="400" height="300" fill="#000" filter="url(#ngGrainD)" opacity="0.5"/>' +
+        '<rect x="0" y="0" width="400" height="300" fill="#000" filter="url(#ngGrainL)" opacity="0.42"/>' +
+        '<ellipse cx="148" cy="96" rx="102" ry="66" fill="url(#ngSheen)"/>' +
+        '<ellipse cx="296" cy="240" rx="156" ry="110" fill="url(#ngWarm)"/>' +
+        '<path d="' + d + '" fill="none" stroke="#653806" stroke-width="18" opacity="0.16"/>' +
+        '<path d="' + d + '" fill="none" stroke="#472603" stroke-width="6" opacity="0.13"/>' +
+      '</g>' +
+
+      '<path d="' + d + '" fill="none" stroke="url(#ngRim)" stroke-width="2" ' +
+        'stroke-linejoin="round" opacity="0.2"/>' +
+    '</svg>';
+  }
+
+  /* ================= 组装 3D 鸡块 ================= */
+  // 层数越多，侧面越连续（避免出现"千层"条纹）
+  const LAYERS = window.innerWidth < 720 ? 34 : 52;
+  const DEPTH = 56;    // 厚度 (px)
+  const nuggetEl = document.getElementById("nugget");
+  const stageEl  = document.getElementById("stage");
+
+  function buildNugget(seed){
+    const d = buildShape(seed);
+    const specks = buildSpecks(seed);
+    const frag = document.createDocumentFragment();
+
+    for(let i = 0; i < LAYERS; i++){
+      const t = i / (LAYERS - 1);
+      const z = -DEPTH / 2 + t * DEPTH;
+      const el = document.createElement("div");
+      el.className = "slice";
+      el.style.transform = "translateZ(" + z.toFixed(3) + "px)";
+
+      if(i === LAYERS - 1){
+        el.innerHTML = topSVG(d, specks);
+      }else{
+        // 侧面：条带颜色尽量接近，避免层间出现明暗条纹
+        const light = 30 + t * 13;
+        const sat = 52 - t * 6;
+        const col = "hsl(" + (36 - t * 3).toFixed(1) + "," + sat.toFixed(1) + "%," + light.toFixed(1) + "%)";
+        el.innerHTML = '<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">' +
+          '<path d="' + d + '" fill="' + col + '" stroke="' + col +
+          '" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+      }
+      frag.appendChild(el);
+    }
+    nuggetEl.replaceChildren(frag);
+  }
+
+  /* ================= 状态 & 渲染循环 ================= */
+  let rotY = 0;
+  let spinSpeed = 70;      // deg / s
+  let direction = 1;
+  let paused = false;
+  let fling = 0;
+  let totalDeg = 0;
+  let squish = 0;
+  let seed = (Math.random() * 1e9) | 0;
+
+  // 便于分享/调试指定初始角度：index.html?a=120
+  const qa = new URLSearchParams(location.search).get("a");
+  if(qa !== null && !isNaN(Number(qa))) rotY = Number(qa);
+
+  const revEl = document.getElementById("rev");
+  const spdEl = document.getElementById("spd");
+
+  let last = performance.now();
+  let hudTimer = 0;
+
+  function tick(now){
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+
+    const auto = paused ? 0 : spinSpeed * direction;
+    const delta = (auto + fling) * dt;
+
+    rotY += delta;
+    totalDeg += Math.abs(delta);
+
+    fling *= Math.pow(0.11, dt);
+    if(Math.abs(fling) < 2) fling = 0;
+
+    squish *= Math.pow(0.015, dt);
+
+    const floatY = Math.sin(now / 950) * 10;
+    const tiltX  = -10 + Math.sin(now / 1750) * 4;
+    const tiltZ  = Math.sin(now / 2400) * 3.5;
+    const scale  = 1 + squish * 0.13;
+
+    nuggetEl.style.transform =
+      "translate3d(0," + floatY.toFixed(2) + "px,0) " +
+      "rotateX(" + tiltX.toFixed(2) + "deg) " +
+      "rotateY(" + rotY.toFixed(2) + "deg) " +
+      "rotateZ(" + tiltZ.toFixed(2) + "deg) " +
+      "scale(" + scale.toFixed(3) + ")";
+
+    if(now - hudTimer > 90){
+      hudTimer = now;
+      revEl.textContent = Math.floor(totalDeg / 360).toLocaleString("en-US");
+      spdEl.textContent = Math.round(paused ? 0 : spinSpeed);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  /* ================= 拖动 ================= */
+  let dragging = false;
+  let lastX = 0, lastMoveT = 0;
+  let moved = 0;
+
+  stageEl.addEventListener("pointerdown", function(e){
+    dragging = true;
+    lastX = e.clientX;
+    lastMoveT = performance.now();
+    fling = 0;
+    moved = 0;
+    stageEl.classList.add("grabbing");
+    try{ stageEl.setPointerCapture(e.pointerId); }catch(_){}
+  });
+
+  stageEl.addEventListener("pointermove", function(e){
+    if(!dragging) return;
+    const dx = e.clientX - lastX;
+    lastX = e.clientX;
+    const now = performance.now();
+    const dt = Math.max(8, now - lastMoveT);
+    lastMoveT = now;
+
+    const step = dx * 0.68;
+    rotY += step;
+    totalDeg += Math.abs(step);
+    moved += Math.abs(dx);
+
+    fling = (step / (dt / 1000)) * 0.55;
+  });
+
+  function endDrag(e){
+    if(!dragging) return;
+    dragging = false;
+    stageEl.classList.remove("grabbing");
+    if(performance.now() - lastMoveT > 130) fling = 0;
+    fling = Math.max(-1700, Math.min(1700, fling));
+    if(moved < 6) popText(e);
+  }
+  stageEl.addEventListener("pointerup", endDrag);
+  stageEl.addEventListener("pointercancel", endDrag);
+  window.addEventListener("pointerup", endDrag);
+
+  /* ================= 点击彩蛋 ================= */
+  const WORDS = ["咔嚓", "好脆！", "别转晕了", "这算食物吗", "3:00 AM", "再转一圈", "饿了", "它不会凉的", "金黄酥脆"];
+  let wordIdx = 0;
+
+  function popText(e){
+    const r = stageEl.getBoundingClientRect();
+    const el = document.createElement("div");
+    el.className = "pop";
+    el.textContent = WORDS[wordIdx++ % WORDS.length];
+    el.style.left = (e.clientX - r.left) + "px";
+    el.style.top  = (e.clientY - r.top) + "px";
+    el.style.setProperty("--r", (Math.random() * 16 - 8).toFixed(1) + "deg");
+    stageEl.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1150);
+    squish = 1;
+  }
+
+  /* ================= 控件 ================= */
+  const speedInput = document.getElementById("speed");
+  const pauseBtn = document.getElementById("pause");
+  const flipBtn = document.getElementById("flip");
+  const rerollBtn = document.getElementById("reroll");
+
+  speedInput.addEventListener("input", function(){
+    spinSpeed = Number(speedInput.value);
+    spdEl.textContent = Math.round(paused ? 0 : spinSpeed);
+  });
+
+  function togglePause(){
+    paused = !paused;
+    pauseBtn.textContent = paused ? "继续" : "暂停";
+    pauseBtn.classList.toggle("on", paused);
+  }
+  pauseBtn.addEventListener("click", togglePause);
+
+  flipBtn.addEventListener("click", function(){
+    direction *= -1;
+    flipBtn.classList.toggle("on", direction < 0);
+    flipBtn.textContent = direction > 0 ? "反向" : "正向";
+  });
+
+  rerollBtn.addEventListener("click", function(){
+    seed = (Math.random() * 1e9) | 0;
+    buildNugget(seed);
+    squish = 1;
+  });
+
+  window.addEventListener("keydown", function(e){
+    if(e.code === "Space"){
+      e.preventDefault();
+      togglePause();
+    }
+    if(e.key === "r" || e.key === "R"){
+      rerollBtn.click();
+    }
+  });
+
+  /* ================= 星空 ================= */
+  (function makeStars(){
+    const layer = document.getElementById("stars");
+    const frag = document.createDocumentFragment();
+    for(let i = 0; i < 120; i++){
+      const s = document.createElement("i");
+      const size = (Math.random() * 2.1 + 0.5).toFixed(2);
+      s.style.cssText =
+        "left:" + (Math.random() * 100).toFixed(2) + "%;" +
+        "top:" + (Math.random() * 100).toFixed(2) + "%;" +
+        "width:" + size + "px;height:" + size + "px;" +
+        "animation-delay:" + (-Math.random() * 6).toFixed(2) + "s;" +
+        "animation-duration:" + (3 + Math.random() * 5).toFixed(2) + "s;";
+      frag.appendChild(s);
+    }
+    layer.appendChild(frag);
+  })();
+
+  /* ================= 启动 ================= */
+  buildNugget(seed);
+  requestAnimationFrame(function(t){ last = t; tick(t); });
+
+})();
+</script>
+</body>
+</html>
