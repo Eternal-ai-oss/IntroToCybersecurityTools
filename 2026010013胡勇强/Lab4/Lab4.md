@@ -185,7 +185,7 @@ Everything、Geek Uninstaller、WizTree 三款软件**必须安装**，并分别
 
 | 项目 | 内容 |
 | --- | --- |
-| 安装的脚本名称 | 【待填：在 Greasy Fork 装好一个脚本后，把脚本名填在这里】 |
+| 安装的脚本名称 | 网页限制解除（解除网页禁止复制、右键和选中文本的限制，通杀大部分网站） |
 | 安装脚本使用的网站 | https://greasyfork.org/zh-CN |
 | 安装的 Edge 插件名称 | Dark Reader（暗色模式） |
 
