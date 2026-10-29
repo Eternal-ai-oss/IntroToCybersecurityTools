@@ -180,12 +180,12 @@ Content-Type: text/html
 
 | 题目 | CTFHub 路径 | WP 文件 | Flag |
 | --- | --- | --- | --- |
-| 目录遍历 | 信息泄露 → 目录遍历 | [wp_dir_traversal.md](wp/wp_dir_traversal.md) | （填写） |
-| PHPINFO | 信息泄露 → PHPINFO | [wp_phpinfo.md](wp/wp_phpinfo.md) | （填写） |
-| 请求方式 | Web 前置技能 → HTTP 协议 → 请求方式 | [wp_http_method.md](wp/wp_http_method.md) | （填写） |
-| 302 跳转 | Web 前置技能 → HTTP 协议 → 302 跳转 | [wp_redirect_302.md](wp/wp_redirect_302.md) | （填写） |
-| Cookie | Web 前置技能 → HTTP 协议 → Cookie | [wp_cookie.md](wp/wp_cookie.md) | （填写） |
-| 基础认证 | Web 前置技能 → HTTP 协议 → 基础认证 | [wp_basic_auth.md](wp/wp_basic_auth.md) | （填写） |
+| 目录遍历 | 信息泄露 → 目录遍历 | [wp_dir_traversal.md](wp/wp_dir_traversal.md) | ctfhub{a0007cea9f95f1bb3f5f5a9a} |
+| PHPINFO | 信息泄露 → PHPINFO | [wp_phpinfo.md](wp/wp_phpinfo.md) | ctfhub{ed5cd7a301f4c5f82f3eb330} |
+| 请求方式 | Web 前置技能 → HTTP 协议 → 请求方式 | [wp_http_method.md](wp/wp_http_method.md) | ctfhub{28307e9522a8a6582b00bc22} |
+| 302 跳转 | Web 前置技能 → HTTP 协议 → 302 跳转 | [wp_redirect_302.md](wp/wp_redirect_302.md) | ctfhub{fb54e85ea26d82baca0798fe} |
+| Cookie | Web 前置技能 → HTTP 协议 → Cookie | [wp_cookie.md](wp/wp_cookie.md) | ctfhub{35f348e263ca33839806054c} |
+| 基础认证 | Web 前置技能 → HTTP 协议 → 基础认证 | [wp_basic_auth.md](wp/wp_basic_auth.md) | ctfhub{7b20d62808caf46d4e605d07} |
 
 > 每道题的题目要求、提示、截图要求和写作提示都写在对应的 WP 模板里。**不要改动 WP 文件名和本表的链接**；如果某道题临时下线，按老师通知替换题目，并同步修改本表和对应 WP，不要删除整行。
 >
@@ -199,12 +199,12 @@ Content-Type: text/html
 
 | 题目 | HTTP 报文位置 | 漏洞/问题 |
 | --- | --- | --- |
-| 目录遍历 | （填写） | （填写） |
-| PHPINFO | （填写） | （填写） |
-| 请求方式 | （填写） | （填写） |
-| 302 跳转 | （填写） | （填写） |
-| Cookie | （填写） | （填写） |
-| 基础认证 | （填写） | （填写） |
+| 目录遍历 | URL 路径 + 响应体（目录索引） | 服务器开了目录浏览，敏感文件的路径和文件名直接暴露 |
+| PHPINFO | 响应体（整页配置表） | 调试页 phpinfo 没删，泄露 PHP/Apache 版本、绝对路径和环境变量（flag 就在环境变量里） |
+| 请求方式 | 请求行的第一个 token（方法） | 服务端按方法名分支判断，自定义方法 CTFHUB 才会返回 flag |
+| 302 跳转 | 状态行 + Location 响应头 | 关键内容藏在 302 那一跳的响应体里，浏览器自动跟随就把证据跳过了 |
+| Cookie | 请求头 Cookie / 响应头 Set-Cookie | 身份标记 admin=0 写在客户端 Cookie 里，改成 admin=1 就冒充了管理员 |
+| 基础认证 | 请求头 Authorization: Basic base64(用户名:密码) | 401 + WWW-Authenticate 提示用户名，密码又是常见弱口令，可字典爆破 |
 
 示例（不是本题）：`404 错误页泄露服务器版本 → 状态行/响应头 → 信息泄露`。
 
@@ -212,7 +212,7 @@ Content-Type: text/html
 
 用 3—5 句话回答：这 6 道题做完后，你对 HTTP 请求/响应的哪一部分印象最深？为什么？
 
-（填写）
+印象最深的是「状态行」这一行字。以前看网页只知道「打开了」，做完这 6 道题才发现同一个 URL 可能先返回 302 再返回 200，浏览器悄悄替我做了一次跳转，而 flag 恰好藏在被我忽略的那一跳里。第二个感受是「位置决定危害」：请求行的方法、请求头的 Cookie 和 Authorization、URL 里的路径、响应体的目录列表，每个位置只改一点点，服务器的反应就完全不同。所以读报文时我会先按「请求行 → 请求头 → 空行 → 请求体 / 状态行 → 响应头 → 响应体」的顺序扫一遍，而不是直接看页面长什么样。
 
 ---
 
@@ -222,8 +222,8 @@ Content-Type: text/html
 
 | 选做题 | 是否完成 | 关键工具/方法 | 一句话收获 |
 | --- | --- | --- | --- |
-| 备份文件下载 | （填写“完成”或“未做”） | （填写） | （填写） |
-| Git 泄露 | （填写“完成”或“未做”） | （填写） | （填写） |
+| 备份文件下载 | 未做 | — | 本次只完成了 6 道必做题，这道题超出当前进度 |
+| Git 泄露 | 未做 | — | 本次只完成了 6 道必做题，这道题超出当前进度 |
 
 ---
 
