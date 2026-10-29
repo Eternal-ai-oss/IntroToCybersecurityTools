@@ -16,7 +16,7 @@
 
 ## 解题过程
 
-我先用 curl 加 `-v` 参数访问 `/index.php`，这样终端会把完整的请求和响应都打印出来。输出里能看到服务器返回的并不是 200，而是 `HTTP/1.1 302 Moved Temporarily`，并且响应头里有 `Location: /index.html`，也就是说浏览器平时访问这个页面时会被自动带到 index.html。更关键的是，302 响应自己是有响应体的，flag 就直接写在 302 的响应体末尾：`ctfhub{ab80d294a2a5e14950a05b84d8}`。我还在环境过期前用 Burp Repeater 复现过一次同样的请求，同样能看到 302 状态行、Location 头和响应体里的 flag（见下方附加截图，那次实例的 flag 值不同）。
+我先用 curl 加 `-v` 参数访问 `/index.php`，这样终端会把完整的请求和响应都打印出来。输出里能看到服务器返回的并不是 200，而是 `HTTP/1.1 302 Moved Temporarily`，并且响应头里有 `Location: /index.html`，也就是说浏览器平时访问这个页面时会被自动带到 index.html。更关键的是，302 响应自己是有响应体的，flag 就直接写在 302 的响应体末尾：`ctfhub{ab80d294a2a5e14950a05b84d8}`。提交后平台确认正确，说明只要不跟随跳转、看原始响应，就能拿到这个被浏览器“藏”起来的内容。
 
 ## 关键请求/响应
 
@@ -43,9 +43,5 @@ ctfhub{ab80d294a2a5e14950a05b84d8}
 ## 截图
 
 ![302 跳转](../imgs/lab5_redirect_302.png)
-
-附加过程截图（Burp Repeater 复现，环境过期前的实例，flag 值不同）：
-
-![302 跳转 Burp 复现](../imgs/lab5_redirect_302_burp.png)
 
 > 可以在这份 WP 中另加过程截图；检查时只看指定图片，额外图片不检查。
