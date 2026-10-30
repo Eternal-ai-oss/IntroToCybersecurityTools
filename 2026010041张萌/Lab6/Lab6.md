@@ -969,10 +969,10 @@ ping -c 1 mysite.test
 
 | 项目 | 记录 |
 | :--- | :--- |
-| Kali 的 IP 地址 | （待填：运行 `hostname -I`，填形如 `192.168.88.x` 的地址） |
+| Kali 的 IP 地址 | `192.168.243.130`（`hostname -I` 输出，VMware NAT 网段） |
 | 修改前的监听地址 | `127.0.0.1:8000`（`ss -ltnp` 显示本地地址仅回环，仅本机可达） |
 | 修改后的监听地址 | `0.0.0.0:8000`（接受发往本机任意网卡的 8000 端口连接） |
-| Windows 能否通过 Kali IP 访问；使用 Kali 浏览器代替时写明原因 | 能。Windows 宿主机与 Kali 同处 VMware NAT 局域网（`192.168.88.0/24`），且 Flask 已监听 `0.0.0.0`，浏览器访问 `http://192.168.88.x:8000` 看到登录成功页与身份查询面板 |
+| Windows 能否通过 Kali IP 访问；使用 Kali 浏览器代替时写明原因 | 能。Windows 宿主机与 Kali 同处 VMware NAT 局域网（`192.168.243.0/24`），且 Flask 已监听 `0.0.0.0`，在 Windows 浏览器访问 `http://192.168.243.130:8000` 看到登录成功页与身份查询面板（见 `imgs/lab6_site.png`） |
 | `notes.db` 完整路径 | `~/Lab6/site/notes.db`（即 `/home/kali/Lab6/site/notes.db`，与 `app.py` 同目录） |
 | 两个测试用户名 | `alice`、`bob`（密码均为 `123456`，仅测试用） |
 | 数据库中的密码保存形式 | 明文。`sqlite3 notes.db "SELECT ..."` 直接输出 `1|alice|123456`、`2|bob|123456` |
