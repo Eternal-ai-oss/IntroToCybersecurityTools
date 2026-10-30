@@ -11,28 +11,28 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 环境地址 | http://challenge-9e6d5f04e6142319.sandbox.ctfhub.com:10800/ |
-| Flag | ctfhub{d9e218bcbcb06ab8a7db27ae} |
+| 环境地址 | http://challenge-416307d3d1399c99.sandbox.ctfhub.com:10800/ |
+| Flag | ctfhub{8c13107b8cf1e51c40ba2109} |
 
 ## 解题过程
 
-打开题目后，浏览器访问 `/index.php`，页面只显示与 HTTP 方法相关的提示，没有 flag，说明服务端是按请求方法区分处理的。我打开 Burp 并开启 Proxy → Intercept，刷新页面拦截到一条 `GET /index.php` 请求；在请求编辑区把请求行第一个词 `GET` 改成 `CTFHUB`，其余请求头原样保留，点 Forward 放行。浏览器页面随即返回 `good job! ctfhub{d9e218bcbcb06ab8a7db27ae}`。这说明服务端只对自定义的 `CTFHUB` 方法返回 flag，默认的 GET 会被拒绝。
+打开题目后，浏览器访问 `/index.php`，页面只显示与 HTTP 方法相关的提示，没有 flag，说明服务端是按请求方法区分处理的。我把这条请求发送到 Burp 的 Repeater，在请求编辑区把请求行第一个词 `GET` 改成 `CTFHUB`，其余请求头原样保留，点 Send 发送。响应面板随即返回 `good job! ctfhub{8c13107b8cf1e51c40ba2109}`。这说明服务端只对自定义的 `CTFHUB` 方法返回 flag，默认的 GET 会被拒绝。
 
 ## 关键请求/响应
 
 ```http
 CTFHUB /index.php HTTP/1.1
-Host: challenge-9e6d5f04e6142319.sandbox.ctfhub.com:10800
+Host: challenge-416307d3d1399c99.sandbox.ctfhub.com:10800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
 Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Referer: http://challenge-9e6d5f04e6142319.sandbox.ctfhub.com:10800/index.php
+Referer: http://challenge-416307d3d1399c99.sandbox.ctfhub.com:10800/index.php
 Accept-Encoding: gzip, deflate, br
 Connection: keep-alive
 
 HTTP/1.1 200 OK
 Content-Type: text/html; charset=UTF-8
 
-good job! ctfhub{d9e218bcbcb06ab8a7db27ae}
+good job! ctfhub{8c13107b8cf1e51c40ba2109}
 ```
 
 ## 原理与复盘

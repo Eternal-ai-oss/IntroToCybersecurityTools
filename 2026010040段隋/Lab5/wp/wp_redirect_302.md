@@ -11,18 +11,18 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 环境地址 | http://challenge-91921174854df8a1.sandbox.ctfhub.com:10800/ |
-| Flag | ctfhub{468ff017654153f7eaef5f74} |
+| 环境地址 | http://challenge-2115f1620465970.sandbox.ctfhub.com:10800/ |
+| Flag | ctfhub{4a7114d2e7922f0464063829} |
 
 ## 解题过程
 
-打开题目后，浏览器访问 `/index.html`，页面只显示「No Flag here!」和一个「Give me Flag」链接，没有 flag。点击「Give me Flag」时页面会请求 `/index.php`，但浏览器立刻又跳回 `index.html`，看起来什么都没发生。为了看清跳转前的真实响应，我打开 Burp 的 Proxy → HTTP history，找到那条 `GET /index.php` 请求：状态码是 `302 Moved Temporarily`，响应头里有 `Location: /index.html`，而 302 的响应体里正是 flag。浏览器会自动跟随 Location，把这段 302 响应连同响应体隐藏掉了，所以只盯最终页面永远看不到 flag，必须看原始报文。
+打开题目后，浏览器访问 `/index.html`，页面只显示「No Flag here!」和一个「Give me Flag」链接，没有 flag。点击「Give me Flag」时页面会请求 `/index.php`，但浏览器立刻又跳回 `index.html`，看起来什么都没发生。为了看清跳转前的真实响应，我把对 `/index.php` 的请求发到 Burp 的 Repeater 重放：状态码是 `302 Moved Temporarily`，响应头里有 `Location: /index.html`，而 302 的响应体里正是 flag。浏览器会自动跟随 Location，把这段 302 响应连同响应体隐藏掉了，所以只盯最终页面永远看不到 flag，必须看原始报文。
 
 ## 关键请求/响应
 
 ```http
 GET /index.php HTTP/1.1
-Host: challenge-91921174854df8a1.sandbox.ctfhub.com:10800
+Host: challenge-2115f1620465970.sandbox.ctfhub.com:10800
 
 HTTP/1.1 302 Moved Temporarily
 Server: openresty/1.21.4.2
@@ -36,7 +36,7 @@ Access-Control-Allow-Headers: X-Requested-With
 Access-Control-Allow-Methods: *
 Content-Length: 33
 
-ctfhub{468ff017654153f7eaef5f74}
+ctfhub{4a7114d2e7922f0464063829}
 ```
 
 ## 原理与复盘

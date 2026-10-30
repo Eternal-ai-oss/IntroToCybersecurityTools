@@ -11,33 +11,30 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 环境地址 | http://challenge-038859a5a0c851e.sandbox.ctfhub.com:10800/ |
-| Flag | ctfhub{966a303508ea4461bf09bf4e} |
+| 环境地址 | http://challenge-756b86ca4b05272c.sandbox.ctfhub.com:10800/ |
+| Flag | ctfhub{948d1b194db33d0a24091c99} |
 
 ## 解题过程
 
-开启题目后访问靶场首页，服务器返回 `401 Unauthorized`，响应头中带 `WWW-Authenticate: Basic realm="..."`，浏览器弹出用户名/密码登录框，说明这是 HTTP Basic 认证。题目提示是弱口令，并且页面提供了「加密访问」选项——勾选后前端会把密码加密再提交。我在 Burp 中把登录请求发送到 Intruder，username 固定为 `admin`，把 `password` 的值设为 payload 位置，用常见弱口令字典逐个尝试。抓到的请求体里，password 是加密后的密文；当密文为 `021256` 时返回 `200 OK`，响应体中直接出现了 flag，它对应的明文密码是 `696969`。请求头中的 `Authorization: Basic YWRtaW46YWRtaW4=`（解码为 `admin:admin`）则体现了 Basic 认证把凭证做 Base64 后放进请求头的方式。
+开启题目后点击页面链接，服务器对 `flag.html` 返回 `401 Unauthorized`，响应头中带 `WWW-Authenticate: Basic realm="Do u know admin ?"`，浏览器弹出用户名/密码登录框，说明这是 HTTP Basic 认证。我先随便填了一组用户名密码，在 Burp 里抓到请求头多了一行 `Authorization: Basic ...`，Base64 解码正好是 `用户名:密码`，验证了它只是编码、没有加密。题目附件是一个常见弱口令字典，于是我把请求发到 Intruder，把 `Basic ` 后面那串编码设为 payload 位置，在 Payload processing 里先加前缀 `admin:`、再做 Base64 编码，并取消 URL 编码（否则编码后的 `=` 会被转成 `%3D` 导致服务端解不开）。开始攻击后按状态码排序，绝大多数是 401，只有一条返回 `200 OK`，对应密码 `696969`，其 `Authorization: Basic YWRtaW46Njk2OTY5` 解码正是 `admin:696969`。用它重放请求，响应体中直接返回了 flag。
 
 ## 关键请求/响应
 
 ```http
 GET /flag.html HTTP/1.1
-Host: challenge-038859a5a0c851e.sandbox.ctfhub.com:10800
-Authorization: Basic YWRtaW46YWRtaW4=
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 30
-
-username=admin&password=021256
+Host: challenge-756b86ca4b05272c.sandbox.ctfhub.com:10800
+Authorization: Basic YWRtaW46Njk2OTY5
+Connection: keep-alive
 
 HTTP/1.1 200 OK
 Server: openresty/1.21.4.2
 Content-Type: text/html; charset=UTF-8
 X-Powered-By: PHP/5.6.40
 
-ctfhub{966a303508ea4461bf09bf4e}
+ctfhub{948d1b194db33d0a24091c99}
 ```
 
-> 说明：请求体中的 `password=021256` 是明文密码 `696969` 在开启「加密访问」后提交的密文。
+> 说明：`YWRtaW46Njk2OTY5` 就是 `base64("admin:696969")`，Base64 只是编码，解码即可还原出用户名和密码。
 
 ## 原理与复盘
 

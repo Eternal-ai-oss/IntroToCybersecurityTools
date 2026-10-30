@@ -11,24 +11,24 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 环境地址 | http://challenge-b9eb2588bcdf005e.sandbox.ctfhub.com:10800/phpinfo.php |
-| Flag | ctfhub{05dbf88b16fa745693dab6fd} |
+| 环境地址 | http://challenge-3b5c4ce175453a7e.sandbox.ctfhub.com:10800/phpinfo.php |
+| Flag | ctfhub{193d5db7d5ddc394bd67ea30} |
 
 ## 解题过程
 
-开启题目后，根据提示直接访问 `/phpinfo.php`，页面是 PHP 7.3.14 的 `phpinfo()` 输出，包含大量服务器配置信息。由于页面很长，我用查找功能（浏览器 `Ctrl + F`，或 Burp 响应面板的搜索框）搜索关键字 `ctfhub`，很快命中多处，其中一处是 `FLAG` 字段，值就是 `ctfhub{05dbf88b16fa745693dab6fd}`。同时页面还暴露了 PHP 版本、Server API、DOCUMENT_ROOT、环境变量等敏感信息。
+开启题目后，根据提示直接访问 `/phpinfo.php`，页面是 PHP 7.3.14 的 `phpinfo()` 输出，包含大量服务器配置信息。由于页面很长，我用查找功能（浏览器 `Ctrl + F`，或 Burp 响应面板的搜索框）搜索关键字 `ctfhub`，很快命中多处，其中一处是 `FLAG` 字段，值就是 `ctfhub{193d5db7d5ddc394bd67ea30}`。同时页面还暴露了 PHP 版本、Server API、DOCUMENT_ROOT、环境变量等敏感信息。
 
 ## 关键请求/响应
 
 ```http
 GET /phpinfo.php HTTP/1.1
-Host: challenge-b9eb2588bcdf005e.sandbox.ctfhub.com:10800
+Host: challenge-3b5c4ce175453a7e.sandbox.ctfhub.com:10800
 
 HTTP/1.1 200 OK
 Content-Type: text/html; charset=UTF-8
 
 ...
-<tr><td class="e">FLAG</td><td class="v">ctfhub{05dbf88b16fa745693dab6fd}</td></tr>
+<tr><td class="e">FLAG</td><td class="v">ctfhub{193d5db7d5ddc394bd67ea30}</td></tr>
 ...
 ```
 

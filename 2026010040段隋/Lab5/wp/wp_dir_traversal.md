@@ -11,26 +11,26 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 环境地址 | http://challenge-ab9f8f67a4237f67.sandbox.ctfhub.com:10800/ |
-| Flag | ctfhub{7484b70b91c3da865496cce4} |
+| 环境地址 | http://challenge-7064c119bbbf8f79.sandbox.ctfhub.com:10800/ |
+| Flag | ctfhub{20160ad52ea9438449fac1a0} |
 
 ## 解题过程
 
-开启题目后访问靶场首页 `/flag_in_here/`，页面是目录索引（autoindex），列出若干以数字命名的子目录。按「目录遍历」的思路，我顺着目录一层层往下点；由于目录层级较深、组合较多，为了更快定位，我也用 Burp Intruder 对目录名做了数字字典爆破，通过响应长度差异区分命中的目录列表页和 404。最终定位到 `/flag_in_here/3/4/` 目录，里面有一个 `flag.txt`，在浏览器打开 `http://challenge-ab9f8f67a4237f67.sandbox.ctfhub.com:10800/flag_in_here/3/4/flag.txt`，页面直接显示出了 flag。
+开启题目后访问靶场首页 `/flag_in_here/`，页面是目录索引（autoindex），列出若干以数字命名的子目录。按「目录遍历」的思路，我顺着目录一层层往下点；由于目录层级较深、组合较多，为了更快定位，我也用 Burp Intruder 对目录名做了数字字典爆破，通过响应长度差异区分命中的目录列表页和 404。最终定位到 `/flag_in_here/2/4/` 目录，里面有一个 `flag.txt`，在浏览器打开 `http://challenge-7064c119bbbf8f79.sandbox.ctfhub.com:10800/flag_in_here/2/4/flag.txt`，页面直接显示出了 flag。
 
 ## 关键请求/响应
 
 ```http
-GET /flag_in_here/3/4/flag.txt HTTP/1.1
-Host: challenge-ab9f8f67a4237f67.sandbox.ctfhub.com:10800
+GET /flag_in_here/2/4/flag.txt HTTP/1.1
+Host: challenge-7064c119bbbf8f79.sandbox.ctfhub.com:10800
 
 HTTP/1.1 200 OK
 Content-Type: text/plain
 
-ctfhub{7484b70b91c3da865496cce4}
+ctfhub{20160ad52ea9438449fac1a0}
 ```
 
-（目录路径为 `/flag_in_here/3/4/flag.txt`；本题不需要修改请求头或请求方法，关键是顺着目录索引逐层遍历。）
+（目录路径为 `/flag_in_here/2/4/flag.txt`；本题不需要修改请求头或请求方法，关键是顺着目录索引逐层遍历。）
 
 ## 原理与复盘
 

